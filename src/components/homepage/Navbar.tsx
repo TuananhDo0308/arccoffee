@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import Logo from "@/assets/Logo.png";
-import { useAppDispatch } from "@/hooks/hook";
-import { changeStatus } from "@/slices/UIcomponentSlice/SigninPopUpSlice";
+import Logo from "@/src/assets/Logo.png";
+import { useAppDispatch } from "@/src/hooks/hook";
+import { changeStatus } from "@/src/slices/UIcomponentSlice/SigninPopUpSlice";
+import { signIn,signOut } from "next-auth/react";
 
 export default function Navbar() {
   // Function to scroll to a section with smooth behavior
@@ -28,10 +29,10 @@ export default function Navbar() {
             <a href="#hero" className="topNav">
               Home
             </a>
-            <a href="#about-us" className="topNav">
+            <a href="#about-us" className="topNav"onClick={()=>signOut()}>
               About Us
             </a>
-            <a href="#shop" className="topNav">
+            <a href="#shop" className="topNav" onClick={()=>signIn("google")}>
               Shop
             </a>
 

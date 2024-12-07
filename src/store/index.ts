@@ -6,6 +6,8 @@ import { persistReducer, persistStore } from 'redux-persist';
 
 import { version } from 'process';
 import signinReducer from '../slices/UIcomponentSlice/SigninPopUpSlice'
+import signupReducer from '../slices/UIcomponentSlice/SignupPopUpSlice'
+import { sign } from 'crypto';
 
 const persistConfig = {
   key: 'root',
@@ -15,6 +17,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   signin:signinReducer,
+  signup:signupReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

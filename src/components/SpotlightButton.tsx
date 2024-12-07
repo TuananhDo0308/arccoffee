@@ -1,14 +1,19 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
-
-
-export const SpotlightButton = ({text}:any) => {
-  const btnRef = useRef(null);
-  const spanRef = useRef(null);
+export const SpotlightButton = ({
+  text,
+  onClick,
+}: {
+  text: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; // Nhận event từ sự kiện click
+}) => {
+  const btnRef = useRef<HTMLButtonElement | null>(null);
+  const spanRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      const { width } = e.target.getBoundingClientRect();
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!btnRef.current) return;
+      const { width } = btnRef.current.getBoundingClientRect();
       const offset = e.offsetX;
       const left = `${(offset / width) * 100}%`;
 
@@ -35,6 +40,7 @@ export const SpotlightButton = ({text}:any) => {
     <motion.button
       whileTap={{ scale: 0.985 }}
       ref={btnRef}
+      onClick={onClick} // Sự kiện click với event
       className="relative w-full max-w-xs overflow-hidden rounded-lg bg-slate-950 px-4 py-3 text-lg font-medium text-white"
     >
       <span className="pointer-events-none relative z-10 mix-blend-difference">
@@ -47,4 +53,3 @@ export const SpotlightButton = ({text}:any) => {
     </motion.button>
   );
 };
-

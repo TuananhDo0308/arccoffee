@@ -2,7 +2,7 @@
 import { Token } from '@/models/token';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import authService from '../../lamhystore-frontend/src/services/auth' 
+import authService from '../../../lamhystore-frontend/src/services/auth' 
 
 
 export interface User {
