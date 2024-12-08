@@ -7,6 +7,7 @@ const clientLinks = {
   },
   homepage: {
     menu: `${clientUrl}/api/menu`,
+    product: `${clientUrl}/api/products`
   },
 };
 

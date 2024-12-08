@@ -1,4 +1,4 @@
-const authUrl = 'http://localhost:5000';
+const authUrl = 'http://localhost:5078';
 
 const apiLinks = {
   user: {
@@ -7,6 +7,7 @@ const apiLinks = {
   },
   homepage: {
     menu:`${authUrl}/api/homepage/menu`,
+    product: `${authUrl}/api/products`
   },
 };
 
