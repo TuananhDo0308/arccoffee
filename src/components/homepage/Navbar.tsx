@@ -7,7 +7,6 @@ import { changeStatus } from "@/src/slices/UIcomponentSlice/SigninPopUpSlice";
 import { signIn,signOut } from "next-auth/react";
 
 export default function Navbar() {
-  // Function to scroll to a section with smooth behavior
   const handleScrollToSection = (sectionId: string) => {
     const section = document.getElementById(sectionId);
     if (section) {
