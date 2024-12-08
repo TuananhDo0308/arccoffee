@@ -3,9 +3,10 @@ import axios from 'axios';
 import { httpClient, apiLinks } from '@/src/utils'
 
 export const GET = async () => {
+
     try {
         const response = await httpClient.get({
-            url: apiLinks.user.region,
+            url: apiLinks.homepage.category,
         })
 
         const data = response.data;
