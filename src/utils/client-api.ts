@@ -7,7 +7,7 @@ const clientLinks = {
     region: `${clientUrl}/api/user/regions`
   },
   homepage: {
-    category:`${clientUrl}/api/hompage/categories`,
+    category:`${clientUrl}/api/homepage/categories`,
     menu: `${clientUrl}/api/menu`,
     product: `${clientUrl}/api/products`
   },

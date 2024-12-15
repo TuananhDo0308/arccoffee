@@ -1,157 +1,69 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useAppDispatch, useAppSelector } from "@/src/hooks/hook";
 import Popup from "../Popup";
 import Step1 from "./Steps/Step1";
 import Step2 from "./Steps/Step2";
 import Step3 from "./Steps/Step3";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Logo from "@/src/assets/SingleLogoblack.png";
 import Icon from "@/src/assets/icon.png";
 import Icon2 from "@/src/assets/tickIcon.png";
-import defaultFile from "@/src/assets/user.png";
-import { useAppDispatch, useAppSelector } from "@/src/hooks/hook";
+import { setCurrentStep } from "@/src/slices/signUpFormdata";
 import { changeStatusSignup } from "@/src/slices/UIcomponentSlice/SignupPopUpSlice";
-import { changeStatus } from "@/src/slices/UIcomponentSlice/SigninPopUpSlice";
-import { apiLinks, clientLinks, httpClient } from "@/src/utils";
+import { changeStatusLogin } from "@/src/slices/UIcomponentSlice/SigninPopUpSlice";
+import {Progress} from "@nextui-org/react";
 
 export default function SignUp() {
-  const [formData, setFormData] = useState({
-    FirstName: "",
-    LastName: "",
-    Email: "",
-    Password: "",
-    PhoneNumber: "",
-    Gender: "",
-    Year: 1900,
-    Month: 12,
-    Day: 1,
-    RegionId: "",
-    CityId: "",
-    DistrictId: "",
-    Street: "",
-    Picture: null as File | null,
-  });
-
-  const [currentStep, setCurrentStep] = useState(1); // Thêm currentStep
   const dispatch = useAppDispatch();
-  const status = useAppSelector((state) => state.signup.value);
-
-  const register = async () => {
-    // Tạo đối tượng FormData
-    const formDataToSend = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value !== null) {
-        formDataToSend.append(key, value as string | Blob); // Thêm từng trường vào FormData
-      }
-    });
-
-    const response = await httpClient.post({
-      url: clientLinks.user.register,
-      data: formData,
-      contentType: "multipart/form-data",
-    });
-    debugger;
-    console.log("Response:", response);
-  };
-  // Gán mặc định file hình ảnh
-
-  useEffect(() => {
-    const convertDefaultImageToFile = async () => {
-      const response = await fetch(defaultFile.src);
-      const blob = await response.blob();
-
-      const file = new File([blob], "default-user.png", { type: blob.type });
-
-      setFormData((prev) => ({ ...prev, Picture: file }));
-    };
-
-    convertDefaultImageToFile();
-  }, []);
-
-  const togglePopup = () => {
-    dispatch(changeStatusSignup());
-  };
-
-  const handleChange = (field: string, value: string | File | null) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+  const { currentStep, formData } = useAppSelector((state) => state.signupData);
+  const status =  useAppSelector((state) => state.signup.value);
 
   const nextStep = () => {
-    setCurrentStep((prev) => Math.min(prev + 1, 3)); // Tối đa 3 bước
+    dispatch(setCurrentStep(currentStep + 1));
   };
 
   const prevStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 1)); // Tối thiểu bước 1
-  };
-
-  const signin = () => {
-    togglePopup();
-    dispatch(changeStatus());
-  };
-
-  const handleSubmit = () => {
-    console.log("Form Submitted:", formData);
-    register();
+    dispatch(setCurrentStep(currentStep - 1));
   };
 
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <Step1 formData={formData} handleChange={handleChange} />;
+        return <Step1 />;
       case 2:
-        return <Step2 formData={formData} handleChange={handleChange} />;
+        return <Step2 />;
       case 3:
-        return <Step3 formData={formData} handleChange={handleChange} />;
+        return <Step3 />;
       default:
         return null;
     }
   };
 
-  if (status) {
+  const handleSubmit = () => {
+    console.log("Submitted Data:", formData);
+  };
+
+  if(status){
     return (
-      <Popup togglePopup={togglePopup}>
-        <div className="flex flex-col justify-center items-center w-[550px] p-5 bg-white gap-5">
-          <div className="flex justify-center flex-col items-start w-full mb-5">
-            <Image src={Logo} alt="app_logo" className="mb-6" />
-            <span className="text-3xl font-bold text-black">Sign Up</span>
-            <span className="text-base font-light text-gray-800">
-              Create an account and start shopping!
-            </span>
-          </div>
-          <div className="flex flex-col w-full justify-center items-center bg-white gap-2">
-            {renderStep()}
-            <div className="flex justify-end flex-w w-full">
-              {currentStep > 1 && (
-                <Image
-                  onClick={prevStep}
-                  alt="icon"
-                  src={Icon}
-                  width={30}
-                  height={30}
-                  className="m-2 "
-                />
-              )}
-              {currentStep < 3 ? (
-                <Image
-                  onClick={nextStep}
-                  alt="icon"
-                  src={Icon}
-                  width={30}
-                  height={30}
-                  className="m-2 rotate-180"
-                />
-              ) : (
-                <Image
-                  onClick={handleSubmit}
-                  alt="icon"
-                  src={Icon2}
-                  width={30}
-                  height={30}
-                  className="m-2"
-                />
-              )}
-            </div>
-            <p className="text-gray-800">or</p>
+    <Popup togglePopup={()=>dispatch(changeStatusSignup())}>
+      <div className="flex flex-col justify-center items-center w-[550px] p-5 bg-white gap-5">
+        <div className="flex justify-center flex-col items-start w-full mb-5">
+          <Image src={Logo} alt="app_logo" className="mb-6" />
+          <span className="text-3xl font-bold text-black">Sign Up</span>
+          <span className="text-base font-light text-gray-800">
+            Create an account and start shopping!
+          </span>
+        </div>
+        <div className="flex flex-col w-full justify-center items-center bg-white gap-2">
+         <Progress aria-label="Loading..." className="w-full mb-4" classNames={{
+        indicator: "bg-gradient-to-r from-pink-500 to-yellow-500",
+      }} value={1/3*currentStep*100} />
+
+          {renderStep()}
+          
+        </div>
+        <p className="text-gray-800">or</p>
             <button
               type="button"
               className="w-full py-3 border border-gray-300 rounded-lg text-sm text-gray-700 flex justify-center items-center gap-2 hover:bg-gray-100"
@@ -183,17 +95,15 @@ export default function SignUp() {
             <p className="text-sm text-gray-600 mt-4">
               Already have an account?{" "}
               <span
-                onClick={signin}
+                onClick={()=>dispatch(changeStatusLogin())}
                 className="text-yellow-500 font-semibold cursor-pointer hover:underline"
               >
                 Sign in
               </span>
             </p>
-          </div>
         </div>
       </Popup>
     );
   }
-
   return null;
 }

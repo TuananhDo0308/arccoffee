@@ -4,6 +4,7 @@ import "./globals.css";
 import clsx from "clsx";
 import { Montserrat } from "next/font/google";
 import ReduxProvider from "@/src/lib/provider";
+import { SessionProvider } from "next-auth/react";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -21,7 +22,11 @@ export default function RootLayout({
     <html lang="en" className="relative">
       <body className={clsx(montserrat.className)}>
         {" "}
-        <ReduxProvider>{children} </ReduxProvider>
+        <SessionProvider>
+          <ReduxProvider>
+            {children} 
+            </ReduxProvider>
+        </SessionProvider>
       </body>
     </html>
   );

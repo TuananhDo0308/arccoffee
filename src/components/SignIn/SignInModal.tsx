@@ -2,9 +2,9 @@
 import Popup from "../Popup";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/hook";
-import { changeStatus } from "@/src/slices/UIcomponentSlice/SigninPopUpSlice";
+import { changeStatusLogin } from "@/src/slices/UIcomponentSlice/SigninPopUpSlice";
 import { changeStatusSignup } from "@/src/slices/UIcomponentSlice/SignupPopUpSlice";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Logo from "@/src/assets/SingleLogoblack.png";
 import { clientLinks, httpClient } from "@/src/utils";
@@ -18,24 +18,32 @@ export default function SignIn() {
   const status = useAppSelector((state) => state.signin.value);
 
   const close = () => {
-    dispatch(changeStatus());
+    dispatch(changeStatusLogin());
   };
 
   const signUp = () => {
+
     close();
     dispatch(changeStatusSignup());
   };
 
   const handleLogin = async (e: React.MouseEvent) => {
     e.preventDefault();
-    const res = await httpClient.post({
-      url: clientLinks.user.signin,
-      data: {
-        login: email,
-        password: password,
-      },
-    });
-    console.log("Login successful:", res.data);
+    // const res = await httpClient.post({
+    //   url: clientLinks.user.signin,
+    //   data: {
+    //     login: email,
+    //     password: password,
+    //   },
+    // });
+    signIn("credentials", {
+      email: email,
+      password: password,
+      redirect: false, // Tùy chọn này để không tự động chuyển hướng
+    })
+
+   
+    // console.log("Login successful:", res.data);
     close();
   };
 

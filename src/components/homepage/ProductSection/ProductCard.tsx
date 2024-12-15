@@ -6,13 +6,33 @@ import {
   useSpring,
 } from "framer-motion";
 import { FiMousePointer } from "react-icons/fi";
+import { useAppDispatch } from "@/src/hooks/hook";
+import { addToCart, CartItem } from "@/src/slices/cartSlice";
+import { addNotification } from "@/src/slices/UIcomponentSlice/NotificationSlice";
 
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = 32.5 / 2;
 
 export const ProductCard = ({ product }: any) => {
   const ref = useRef(null);
-
+  const dispatch=useAppDispatch()
+  const handleAddToCart = () => {
+    const addProduct: CartItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1, 
+    };
+    const id = Date.now(); // Tạo ID duy nhất cho thông báo
+    dispatch(
+      addNotification({
+        id,
+        message: `${product.name} added to cart`,
+      })
+    );
+    dispatch(addToCart(product)); // Gọi hàm Redux để thêm sản phẩm vào giỏ hàng
+  };
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -94,7 +114,9 @@ export const ProductCard = ({ product }: any) => {
 
           <button className=" bg-black border-[1px] text-white py-2 px-4 rounded-full hover:border-black hover:bg-transparent hover:text-black"style={{
               transform: "translateZ(30px)",
-            }}>
+    
+            }}
+            onClick={handleAddToCart}>
             Add +
           </button>
         </div>

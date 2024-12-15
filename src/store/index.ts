@@ -7,17 +7,29 @@ import { persistReducer, persistStore } from 'redux-persist';
 import { version } from 'process';
 import signinReducer from '../slices/UIcomponentSlice/SigninPopUpSlice'
 import signupReducer from '../slices/UIcomponentSlice/SignupPopUpSlice'
+import filteredproduct from '../slices/filteredProductsSlice'
+import cartUiReducer from '../slices/UIcomponentSlice/cartUiSlice'
+import notiReducer from '../slices/UIcomponentSlice/NotificationSlice'
+import signUpDataReducer from '../slices/signUpFormdata'
+import cartReducer from '../slices/cartSlice'
+
+
 import { sign } from 'crypto';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: [], // Only auth will be persisted
+  whitelist: ["cart"], // Only auth will be persisted
 };
 
 const rootReducer = combineReducers({
   signin:signinReducer,
   signup:signupReducer,
+  filteredProducts:filteredproduct,
+  cartUi:cartUiReducer,
+  cart:cartReducer,
+  signupData:signUpDataReducer,
+  notification:notiReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -12,12 +12,12 @@ export const loginStatus = createSlice({
     name:"loginStatus",
     initialState,
     reducers:{
-        changeStatus: (state) => {
+        changeStatusLogin: (state) => {
             state.value = !state.value;
         },
         
     }
 })
 
-export const {changeStatus} = loginStatus.actions
+export const {changeStatusLogin} = loginStatus.actions
 export default loginStatus.reducer

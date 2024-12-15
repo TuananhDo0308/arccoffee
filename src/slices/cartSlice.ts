@@ -1,72 +1,93 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-
+import { createSlice } from "@reduxjs/toolkit";
 export interface CartItem {
   id: string;
   name: string;
   price: number;
+  image: string;
   quantity: number;
 }
 
-export interface CartState {
+interface CartState {
   items: CartItem[];
   totalQuantity: number;
   totalPrice: number;
-  loading: boolean;
 }
 
 const initialState: CartState = {
   items: [],
   totalQuantity: 0,
   totalPrice: 0,
-  loading: false,
 };
-
-
 const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState,
   reducers: {
-    addItem: (state, action: PayloadAction<CartItem>) => {
-      const item = action.payload;
-      const existingItem = state.items.find(i => i.id === item.id);
+    // Thêm sản phẩm vào giỏ hàng
+    addToCart(state, action) {
+      const newItem = action.payload; // Sản phẩm được thêm
+      const existingItem = state.items.find((item) => item.id === newItem.id);
+
+      if (!existingItem) {
+        // Nếu sản phẩm chưa có trong giỏ hàng
+        state.items.push({
+          ...newItem,
+          quantity:1
+        });
+      } else {
+        // Nếu sản phẩm đã có, tăng số lượng
+        existingItem.quantity++;
+      }
+
+      // Tính tổng số lượng và tổng giá trị
+      state.totalQuantity++;
+      state.totalPrice += newItem.price;
+    },
+
+    // Xóa sản phẩm khỏi giỏ hàng
+    removeFromCart(state, action) {
+      const id = action.payload; // ID của sản phẩm cần xóa
+      const existingItem = state.items.find((item) => item.id === id);
 
       if (existingItem) {
-        existingItem.quantity += item.quantity;
-        existingItem.price += item.price * item.quantity;
-      } else {
-        state.items.push({ ...item, quantity: item.quantity });
+        state.totalQuantity -= existingItem.quantity; // Trừ số lượng tổng
+        state.totalPrice -= existingItem.price * existingItem.quantity; // Trừ tổng giá trị
+        state.items = state.items.filter((item) => item.id !== id); // Loại bỏ khỏi danh sách
       }
-      state.totalQuantity += item.quantity;
-      state.totalPrice += item.price * item.quantity;
     },
-    removeItem: (state, action: PayloadAction<string>) => {
-      const itemId = action.payload;
-      const itemIndex = state.items.findIndex(i => i.id === itemId);
 
-      if (itemIndex !== -1) {
-        const item = state.items[itemIndex];
-        state.totalQuantity -= item.quantity;
-        state.totalPrice -= item.price * item.quantity;
-        state.items.splice(itemIndex, 1);
-      }
-    },
-    updateQuantity: (state, action: PayloadAction<{ id: string; quantity: number }>) => {
-      const { id, quantity } = action.payload;
-      const item = state.items.find(i => i.id === id);
+    // Giảm số lượng sản phẩm
+    decreaseQuantity(state, action) {
+      const id = action.payload; // ID sản phẩm
+      const existingItem = state.items.find((item) => item.id === id);
 
-      if (item) {
-        state.totalQuantity += quantity - item.quantity;
-        state.totalPrice += (quantity - item.quantity) * item.price;
-        item.quantity = quantity;
+      if (existingItem && existingItem.quantity > 1) {
+        existingItem.quantity--;
+        state.totalQuantity--;
+        state.totalPrice -= existingItem.price;
       }
     },
-    clearCart: (state) => {
+
+    // Xóa toàn bộ giỏ hàng
+    clearCart(state) {
       state.items = [];
       state.totalQuantity = 0;
       state.totalPrice = 0;
     },
+
+    // Cập nhật số lượng sản phẩm
+    updateQuantity(state, action) {
+      const { id, newQuantity } = action.payload; // ID sản phẩm và số lượng mới
+      const existingItem = state.items.find((item) => item.id === id);
+
+      if (existingItem) {
+        const quantityDifference = newQuantity - existingItem.quantity; // Chênh lệch số lượng
+        existingItem.quantity = newQuantity; // Cập nhật số lượng
+        state.totalQuantity += quantityDifference; // Cập nhật tổng số lượng
+        state.totalPrice += quantityDifference * existingItem.price; // Cập nhật tổng giá
+      }
+    },
   },
 });
 
-export const { addItem, removeItem, updateQuantity, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, decreaseQuantity, clearCart, updateQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
