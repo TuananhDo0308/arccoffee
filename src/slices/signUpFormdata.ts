@@ -3,8 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface SignUpState {
   currentStep: number;
   formData: {
-    FirstName: string;
-    LastName: string;
+    Name: string;
     Email: string;
     Password: string;
     PhoneNumber: string;
@@ -24,8 +23,7 @@ interface SignUpState {
 const initialState: SignUpState = {
   currentStep: 1,
   formData: {
-    FirstName: "",
-    LastName: "",
+    Name: "",
     Email: "",
     Password: "",
     PhoneNumber: "",
