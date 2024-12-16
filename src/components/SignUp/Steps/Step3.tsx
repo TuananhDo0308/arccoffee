@@ -103,8 +103,7 @@ const Step3 = () => {
       try {
         // Tạo FormData
         const formData1 = new FormData();
-        formData1.append("FirstName", formData.FirstName || "");
-        formData1.append("LastName", formData.LastName || "");
+        formData1.append("Name", formData.Name || "");
         formData1.append("Email", formData.Email);
         formData1.append("Password", formData.Password);
         formData1.append("PhoneNumber", formData.PhoneNumber);

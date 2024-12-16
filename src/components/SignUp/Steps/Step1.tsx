@@ -17,10 +17,10 @@ export default function Step1() {
   const dispatch = useAppDispatch();
   const { currentStep, formData } = useAppSelector((state) => state.signupData);
 
-  const [firstNameError, setFirstNameError] = React.useState<string | null>(
+  const [nameError, setNameError] = React.useState<string | null>(
     null
   );
-  const [lastNameError, setLastNameError] = React.useState<string | null>(null);
+  // const [lastNameError, setLastNameError] = React.useState<string | null>(null);
   const [genderError, setGenderError] = React.useState<string | null>(null);
   const [dateError, setDateError] = React.useState<string>("");
 
@@ -31,21 +31,20 @@ export default function Step1() {
     e.preventDefault();
 
     // Validate tất cả các trường
-    const firstNameError = validateFirstName();
-    const lastNameError = validateLastName();
+    const nameError = validateName();
     const dateValidationError = validateDate(date);
     const genderValidationError = validateGender(formData.Gender);
 
     // Cập nhật lỗi
-    setFirstNameError(firstNameError);
-    setLastNameError(lastNameError);
+    setNameError(nameError);
+    // setLastNameError(lastNameError);
     setDateError(dateValidationError);
     setGenderError(genderValidationError);
 
     // Kiểm tra nếu tất cả các trường hợp đều hợp lệ
     if (
-      !firstNameError &&
-      !lastNameError &&
+      !nameError &&
+      // !lastNameError &&
       !dateValidationError &&
       !genderValidationError
     ) {
@@ -57,47 +56,24 @@ export default function Step1() {
     dispatch(updateFormData({ field, value }));
   };
 
-  //____________FirstName__________________
-  const validateFirstName = () => {
-    if (formData.FirstName == "") {
-      setFirstNameError("Last Name is required");
-      return "First Name is required";
+  //____________Name__________________
+  const validateName = () => {
+    if (formData.Name === "") {
+        return "Name is required";
     } else {
-      setFirstNameError("");
-      return "";
+        return "";
     }
   };
-  const handleFirstNameChange = (value: string) => {
-    handleChange("FirstName", value);
-  };
-  const isInvalidFirstName = React.useMemo(() => {
-    if (validateFirstName() == "") {
-      return false;
-    } else {
-      return true;
-    }
-  }, [formData.FirstName]);
 
-  //____________LastName__________________
-  const validateLastName = () => {
-    if (formData.LastName == "") {
-      setLastNameError("Last Name is required");
-      return "Last Name is required";
-    } else {
-      setLastNameError(null);
-      return "";
-    }
+  const handleFirstNameChange = (value: string) => {
+      handleChange("Name", value);
+      // Cập nhật lỗi ngay khi người dùng nhập
+      const error = validateName();
+      setNameError(error);
   };
-  const handleLastNameChange = (value: string) => {
-    handleChange("LastName", value);
-  };
-  const isInvalidLasttName = React.useMemo(() => {
-    if (validateLastName() == "") {
-      return false;
-    } else {
-      return true;
-    }
-  }, [formData.LastName]);
+  const isInvalidName = React.useMemo(() => {
+    return validateName() != ""; // Chỉ kiểm tra, không gọi setState
+  }, [formData.Name]);
 
   //____________DoB__________________
   const validateDate = (date: CalendarDate | null) => {
@@ -154,26 +130,14 @@ export default function Step1() {
         <Input
           isRequired
           className="max-w-xs flex-grow"
-          label="First Name"
-          color={isInvalidFirstName ? "danger" : "default"}
+          label="Name"
+          color={isInvalidName ? "danger" : "default"}
           variant="bordered"
-          defaultValue={formData.FirstName}
-          errorMessage={firstNameError}
-          validate={validateFirstName}
-          isInvalid={isInvalidFirstName}
+          defaultValue={formData.Name}
+          errorMessage={nameError}
+          validate={validateName}
+          isInvalid={isInvalidName}
           onValueChange={handleFirstNameChange}
-        />
-        <Input
-          isRequired
-          className="max-w-xs"
-          label="Last Name"
-          variant="bordered"
-          defaultValue={formData.LastName}
-          errorMessage={lastNameError}
-          color={isInvalidLasttName ? "danger" : "default"}
-          isInvalid={isInvalidLasttName}
-          onValueChange={handleLastNameChange}
-          validate={validateLastName}
         />
       </div>
 
