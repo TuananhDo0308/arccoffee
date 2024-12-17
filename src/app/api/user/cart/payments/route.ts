@@ -1,16 +1,14 @@
-
 import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
-import { httpClient, apiLinks } from '@/src/utils';
-import { auth } from '@/auth'; // Đường dẫn tới cấu hình NextAuth
+import { httpClient, apiLinks } from '@/src/utils'
 
-export const GET = async () => {
+export const GET = async (request: NextRequest) => {
     try {
-        const session = await auth();
-        const token = session?.user?.accessToken;
+        const token = request.headers.get('Authorization');
+
         const response = await httpClient.get({
-            url: apiLinks.user.getProfile,
-            token:token
+            url: apiLinks.payment.getPayments,
+            token: token
         })
 
         const data = response.data;
@@ -20,7 +18,7 @@ export const GET = async () => {
         console.error('Error during get api:', error);
 
         if (axios.isAxiosError(error) && error.response) {
-            const errorMessage = error.response.data?.message || 'Failed to get product api'; // Thay đổi thông điệp lỗi nếu cần
+            const errorMessage = error.response.data?.message || 'Failed to get home page api';
             return NextResponse.json(
                 { message: errorMessage },
                 { status: error.response.status }

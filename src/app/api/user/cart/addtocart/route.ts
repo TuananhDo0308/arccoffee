@@ -1,26 +1,30 @@
-
 import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
 import { httpClient, apiLinks } from '@/src/utils';
-import { auth } from '@/auth'; // Đường dẫn tới cấu hình NextAuth
 
-export const GET = async () => {
+export const POST = async (req: NextRequest) => {
+    // Lấy id từ query parameters
+    const url = new URL(req.url);
+    const id = url.searchParams.get('id'); // Lấy giá trị của query parameter 'id'
+    
     try {
-        const session = await auth();
-        const token = session?.user?.accessToken;
-        const response = await httpClient.get({
-            url: apiLinks.user.getProfile,
-            token:token
-        })
+        const token = req.headers.get('Authorization');
+        
+        const response = await httpClient.post({
+            url: `${apiLinks.cart.addToCart}`,
+            params: {prodId: id},
+            
+            token: token
+        });
 
         const data = response.data;
-
+        
         return NextResponse.json({ data }, { status: 200 });
     } catch (error) {
         console.error('Error during get api:', error);
 
         if (axios.isAxiosError(error) && error.response) {
-            const errorMessage = error.response.data?.message || 'Failed to get product api'; // Thay đổi thông điệp lỗi nếu cần
+            const errorMessage = error.response.data?.message || 'Failed to fetch bill details';
             return NextResponse.json(
                 { message: errorMessage },
                 { status: error.response.status }
@@ -33,4 +37,3 @@ export const GET = async () => {
         );
     }
 };
-
