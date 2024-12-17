@@ -6,6 +6,7 @@ interface Options {
   data?: object | string;
   params?: object;
   contentType?: string;
+  token?: string | null;
 }
 
 interface FullOptions extends Options {
@@ -19,12 +20,14 @@ const request = (arg: FullOptions): Promise<AxiosResponse> => {
     url,
     data,
     params,
+    token,
   } = arg;
 
   return axios.request({
     method,
     headers: {
       'content-type': contentType,
+      'Authorization': token,
     },
     url: typeof url === 'string' ? url : url(apiLinks),
     data,

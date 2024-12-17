@@ -4,6 +4,7 @@ const clientLinks = {
   user: {
     signin:`${clientUrl}/api/user/login`,    
     register:`${clientUrl}/api/user/register`,
+    getProfile:`${clientUrl}/api/user/profile`,
     region: `${clientUrl}/api/user/regions`
   },
   homepage: {

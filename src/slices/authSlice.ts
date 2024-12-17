@@ -1,61 +1,29 @@
-// features/authSlice.ts
-import { Token } from '@/models/token';
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-import authService from '../../../lamhystore-frontend/src/services/auth' 
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-
-export interface User {
-    id: string;
-    name: string;
-    email: string;
-  }
-  
-export interface AuthState {
-accessToken: Token | null;
-loginLoading: boolean,
+interface AuthState {
+  accessToken: string | null;
+  image: string | null;
 }
 
 const initialState: AuthState = {
   accessToken: null,
-  loginLoading: false,
+  image: null,
 };
-
-export const loginUser = createAsyncThunk(
-    'auth/login',
-    async (arg: { phoneNumber: string; password: string }) => {
-      const { phoneNumber, password } = arg;
-      const result = await authService.login(phoneNumber, password);
-      return result;
-    },
-);
-  
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: (state) => {
-      state.accessToken = null;
+    setAuthData: (state, action: PayloadAction<{ accessToken: string | null; image: string | null }>) => {
+      state.accessToken = action.payload.accessToken;
+      state.image = action.payload.image;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-    .addCase(loginUser.pending, (state) => ({
-        ...state,
-        loginLoading: true,
-    }))
-    .addCase(loginUser.fulfilled, (state, { payload }) => ({
-        ...state,
-        loginLoading: false,
-        accessToken: payload,
-    }))
-    .addCase(loginUser.rejected, (state) => ({
-        ...state,
-        loginLoading: false
-    }))
+    clearAuthData: (state) => {
+      state.accessToken = null;
+      state.image = null;
+    },
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { setAuthData, clearAuthData } = authSlice.actions;
 export default authSlice.reducer;

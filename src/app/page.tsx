@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Navbar from "../components/homepage/Navbar";
 import { Hero } from "../components/homepage/Hero";
 import LenisScrollProvider from "../lib/LenisProvider";
@@ -19,27 +19,23 @@ export default function Home() {
   const { data: session } = useSession();
 
   useEffect(() => {
-    // Log session data to the console
     console.log("Session Data:", session);
   }, [session]); // Add `session` as a dependency
   return (
-    
     <LenisScrollProvider>
-      <CartDrawer/>
-      <SlideInNotifications/>
+      <CartDrawer />
+      <SlideInNotifications />
       <Navbar />
-      <section id="home" >
-              <Hero />
-
+      <section id="home">
+        <Hero />
       </section>
       <section id="shop">
-      <ProductSection />
+        <ProductSection />
       </section>
       <VerticalAccordion />
       <Footer />
       <SignIn />
       <SignUp />
-
     </LenisScrollProvider>
   );
 }

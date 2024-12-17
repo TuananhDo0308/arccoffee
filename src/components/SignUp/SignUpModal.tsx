@@ -19,14 +19,6 @@ export default function SignUp() {
   const { currentStep, formData } = useAppSelector((state) => state.signupData);
   const status =  useAppSelector((state) => state.signup.value);
 
-  const nextStep = () => {
-    dispatch(setCurrentStep(currentStep + 1));
-  };
-
-  const prevStep = () => {
-    dispatch(setCurrentStep(currentStep - 1));
-  };
-
   const renderStep = () => {
     switch (currentStep) {
       case 1:
