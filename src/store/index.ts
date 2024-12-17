@@ -12,6 +12,8 @@ import cartUiReducer from '../slices/UIcomponentSlice/cartUiSlice'
 import notiReducer from '../slices/UIcomponentSlice/NotificationSlice'
 import signUpDataReducer from '../slices/signUpFormdata'
 import cartReducer from '../slices/cartSlice'
+import auth from '../slices/authSlice'
+
 
 
 import { sign } from 'crypto';
@@ -19,11 +21,12 @@ import { sign } from 'crypto';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ["cart"], // Only auth will be persisted
+  whitelist: ["cart","auth"], // Only auth will be persisted
 };
 
 const rootReducer = combineReducers({
   signin:signinReducer,
+  auth:auth,
   signup:signupReducer,
   filteredProducts:filteredproduct,
   cartUi:cartUiReducer,

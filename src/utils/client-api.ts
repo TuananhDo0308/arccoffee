@@ -4,10 +4,9 @@ const clientLinks = {
   user: {
     signin:`${clientUrl}/api/user/login`,    
     register:`${clientUrl}/api/user/register`,
-    region: `${clientUrl}/api/user/regions`,
     cart: `${clientUrl}/api/user/cart`,
-    
-    profile: `${clientUrl}/api/user/profile`,
+    getProfile:`${clientUrl}/api/user/profile`,
+    region: `${clientUrl}/api/user/regions`
   },
   homepage: {
     category:`${clientUrl}/api/homepage/categories`,

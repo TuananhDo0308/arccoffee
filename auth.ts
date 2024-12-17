@@ -1,5 +1,5 @@
-import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import NextAuth, { DefaultSession } from "next-auth";
 import { apiLinks, httpClient } from "./src/utils";
 interface User {
     id?: string
@@ -11,6 +11,19 @@ interface User {
 interface props{
     session:any
     token:any
+}
+
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id?: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+      accessToken?: string | null;
+    } & DefaultSession["user"];
+  }
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({

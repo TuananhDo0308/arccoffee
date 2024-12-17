@@ -5,6 +5,7 @@ import { useAppDispatch } from "@/src/hooks/hook";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { changeStatus } from "@/src/slices/UIcomponentSlice/cartUiSlice";
 import { changeStatusLogin } from "@/src/slices/UIcomponentSlice/SigninPopUpSlice";
+import Link from "next/link";
 
 export default function Navbar() {
   const dispatch = useAppDispatch();
@@ -36,6 +37,7 @@ export default function Navbar() {
 
             {/* User Info */}
             {session?.user?.image ? (
+              <Link href={"./user"}>
               <div className="flex items-center gap-4">
                 <div className="relative w-[40px] h-[40px] rounded-full bg-white overflow-hidden">
                   <Image
@@ -53,6 +55,7 @@ export default function Navbar() {
                   Sign Out
                 </button>
               </div>
+              </Link>
             ) : (
               <button
                 onClick={() => dispatch(changeStatusLogin())}

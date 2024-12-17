@@ -28,7 +28,6 @@ const request = (arg: FullOptions): Promise<AxiosResponse> => {
     headers: {
       'content-type': contentType,
       'Authorization': token,
-
     },
     url: typeof url === 'string' ? url : url(apiLinks),
     data,
