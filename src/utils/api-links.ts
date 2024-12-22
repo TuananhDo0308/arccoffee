@@ -20,6 +20,8 @@ const apiLinks = {
     getCart: `${authUrl}/api/orders/cart`,//
     addToCart: `${authUrl}/api/orders/new-item`,//
     deleteItem: `${authUrl}/api/orders`,//
+    addListCart: `${authUrl}/api/orders/all-items`,//
+
   },
 
   bill: {
@@ -29,7 +31,6 @@ const apiLinks = {
     getDetailBills: `${authUrl}/api/bills`,
     checkout: `${authUrl}/api/bills/payment`,
   },
-
   payment: {
     getPayments: `${authUrl}/api/payments`,
   },

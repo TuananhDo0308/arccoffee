@@ -1,11 +1,12 @@
 import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
 import { httpClient, apiLinks } from '@/src/utils'
+import { auth } from '@/auth';
 
-export const GET = async (request: NextRequest) => {
+export const GET = async () => {
     try {
-        const token = request.headers.get('Authorization');
-
+        const session = await auth();
+        const token = session?.user?.accessToken;
         const response = await httpClient.get({
             url: apiLinks.cart.getCart,
             token: token

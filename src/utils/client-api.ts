@@ -6,6 +6,7 @@ const clientLinks = {
     register:`${clientUrl}/api/user/register`,
     cart: `${clientUrl}/api/user/cart`,
     getProfile:`${clientUrl}/api/user/profile`,
+    updateProfile:`${clientUrl}/api/user/updateProfile`,
     region: `${clientUrl}/api/user/regions`
   },
   homepage: {
@@ -17,10 +18,11 @@ const clientLinks = {
 
   cart: {
     payments: `${clientUrl}/api/user/cart/payments`,
+    cart: `${clientUrl}/api/user/cart`,
     shippings: `${clientUrl}/api/user/cart/shippings`,
-
     deleteItem: `${clientUrl}/api/user/cart/deleteitem`,
     addToCart: `${clientUrl}/api/user/cart/addtocart`,
+    addListCart: `${clientUrl}/api/user/cart/addListCart`,
   },
 
   bill: {
@@ -30,8 +32,8 @@ const clientLinks = {
   },
 
   voucher: {
-    completedBills: `${clientUrl}/api/user/cart/vouchers`,
-    pendingBills: `${clientUrl}/api/user/bills/vouchers/detail`,
+    voucher: `${clientUrl}/api/user/cart/vouchers`,
+    voucherDetail: `${clientUrl}/api/user/bills/vouchers/detail`,
   },
 };
 

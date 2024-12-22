@@ -1,11 +1,9 @@
 "use client"
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { useDispatch } from "react-redux";
 import { clientLinks, httpClient } from "@/src/utils";
 import { setFilteredProducts, setMessage, setProducts } from "@/src/slices/filteredProductsSlice";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/hook";
-
 
 export const SlideTabs = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +13,6 @@ export const SlideTabs = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [position, setPosition] = useState({ left: 0, width: 0, opacity: 0 });
 
-  // Fetch products and categories data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,49 +31,50 @@ export const SlideTabs = () => {
     fetchData();
   }, [dispatch]);
 
-  const filterProducts = (categoryName:string) => {
+  const filterProducts = (categoryName: string) => {
     if (categoryName === 'All') {
-      dispatch(setFilteredProducts(products)); // Show all products
+      dispatch(setFilteredProducts(products));
     } else {
       const filtered = products.filter((product) => product.categoryName === categoryName);
-      dispatch(setFilteredProducts(filtered)); // Filter products by category
+      dispatch(setFilteredProducts(filtered));
     }
     dispatch(setMessage(""))
   };
 
   return (
-    <ul
-      onMouseLeave={() => {
-        setPosition((pv) => ({
-          ...pv,
-          opacity: 0,
-        }));
-      }}
-      className="flex w-fit rounded-full border-2 border-black bg-white p-1"
-    >
-      {/* Tab "All" */}
-      <Tab
-        key="all"
-        category={{ name: 'All', id: 'all' }}
-        setPosition={setPosition}
-        setSelectedCategory={setSelectedCategory}
-        filterProducts={filterProducts}
-      />
-      {categories.map((category) => (
+    <div className="w-full overflow-x-auto pb-2">
+      <ul
+        onMouseLeave={() => {
+          setPosition((pv) => ({
+            ...pv,
+            opacity: 0,
+          }));
+        }}
+        className="flex w-fit rounded-full border-2 border-black bg-white p-1"
+      >
         <Tab
-          key={category.id}
-          category={category}
+          key="all"
+          category={{ name: 'All', id: 'all' }}
           setPosition={setPosition}
           setSelectedCategory={setSelectedCategory}
           filterProducts={filterProducts}
         />
-      ))}
-      <Cursor position={position} />
-    </ul>
+        {categories.map((category) => (
+          <Tab
+            key={category.id}
+            category={category}
+            setPosition={setPosition}
+            setSelectedCategory={setSelectedCategory}
+            filterProducts={filterProducts}
+          />
+        ))}
+        <Cursor position={position} />
+      </ul>
+    </div>
   );
 };
 
-export const Tab = ({ category, setPosition, setSelectedCategory, filterProducts }:any) => {
+export const Tab = ({ category, setPosition, setSelectedCategory, filterProducts }: any) => {
   const ref = useRef(null);
 
   return (
@@ -92,10 +90,10 @@ export const Tab = ({ category, setPosition, setSelectedCategory, filterProducts
         });
       }}
       onClick={() => {
-        setSelectedCategory(category.name); // Cập nhật category đã chọn
-        filterProducts(category.name); // Lọc sản phẩm theo category
+        setSelectedCategory(category.name);
+        filterProducts(category.name);
       }}
-      className="relative z-10 block cursor-pointer px-3 py-1.5 font-semibold uppercase text-white mix-blend-difference md:px-5 md:py-3 md:text-base"
+      className="relative z-10 block cursor-pointer px-2 py-1 sm:px-3 sm:py-1.5 text-sm sm:text-base font-semibold uppercase text-white mix-blend-difference md:px-5 md:py-3 whitespace-nowrap"
     >
       {category.name}
     </li>
@@ -108,7 +106,10 @@ export const Cursor = ({ position }) => {
       animate={{
         ...position,
       }}
-      className="absolute z-0 h-7 rounded-full bg-black md:h-12"
+      className="absolute z-0 h-6 sm:h-7 md:h-12 rounded-full bg-black"
     />
   );
 };
+
+export default SlideTabs;
+

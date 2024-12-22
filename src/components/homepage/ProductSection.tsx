@@ -1,16 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { useDispatch, useSelector } from "react-redux";
-import { clientLinks, httpClient } from "@/src/utils";
 import ProductGrid from "./ProductSection/ProductList";
 import { SlideTabs } from "../Tabs";
 import { SearchBox } from "../SearchInput";
 import SearchPopup from "./SearchPopUp";
-import { useAppDispatch, useAppSelector } from "@/src/hooks/hook";
+import { useAppSelector } from "@/src/hooks/hook";
 import AiIcon from "@/src/assets/AiIcon";
+
 export default function ProductSection() {
-  const { products, filteredProducts, message } = useAppSelector(
+  const { products, message } = useAppSelector(
     (state) => state.filteredProducts
   );
 
@@ -18,42 +17,40 @@ export default function ProductSection() {
   const [userQuestion, setUserQuestion] = useState("");
 
   return (
-    <>
-    
-    <div className="py-5 items-center flex justify-center">
-      <div className="container flex items-center justify-between">
-        <div className="container text-white">
-          <motion.h1
+    <div className="py-5 px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto">
+        <div className="text-white">
+          <motion.div
             initial={{ y: 48, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ ease: "easeInOut", duration: 0.75 }}
-            className="mb-11 text-4xl font-black uppercase text-zinc-50"
+            className="mb-6 sm:mb-11"
           >
-            <div className="flex justify-between">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
               <SlideTabs />
 
-              <div className="flex gap-3">
-                {/* Truyền onClick vào DottedButton */}
+              <div className="flex gap-3 w-full sm:w-auto">
                 <SearchBox />
-
                 <DottedButton onClick={() => setIsSearchOpen(true)} />
               </div>
             </div>
-          </motion.h1>
-          <p className="text-white font-medium text-lg px-10 mb-5">{message}</p>
+          </motion.div>
+          
+          {message && (
+            <p className="text-white font-medium text-base sm:text-lg px-2 sm:px-10 mb-5">{message}</p>
+          )}
 
           <motion.div
             initial={{ y: 48, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ ease: "easeInOut", duration: 0.75 }}
-            className="mb-9 flex items-center justify-between border-b border-zinc-800 px-3 pb-9"
+            className="mb-9 border-b border-zinc-800 pb-9"
           >
-            <ProductGrid/>
+            <ProductGrid />
           </motion.div>
         </div>
       </div>
 
-      {/* Sử dụng component SearchPopup */}
       <SearchPopup
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
@@ -62,7 +59,6 @@ export default function ProductSection() {
         products={products}
       />
     </div>
-    </>
   );
 }
 
@@ -73,21 +69,20 @@ const DottedButton = ({ onClick }: { onClick: () => void }) => {
     <button
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={onClick} // Đảm bảo onClick được truyền vào và gọi khi nhấn nút
-      className={`flex items-center justify-center h-[60px] rounded-full border-2 border-dashed border-white bg-transparent font-semibold uppercase text-black transition-all duration-200 ${
-        isHovered ? "w-[150px]" : "w-[60px]"
+      onClick={onClick}
+      className={`flex items-center justify-center h-[50px] sm:h-[60px] rounded-full border-2 border-dashed border-white bg-transparent font-semibold uppercase text-black transition-all duration-200 ${
+        isHovered ? "w-[130px] sm:w-[150px]" : "w-[50px] sm:w-[60px]"
       }`}
     >
       {isHovered ? (
         <div className="flex gap-1 items-center">
           <AiIcon />
-
-          <span className="text-white font-semibold text-sm">AI Chat</span>
+          <span className="text-white font-semibold text-xs sm:text-sm">AI Chat</span>
         </div>
       ) : (
         <AiIcon />
       )}
     </button>
-    
   );
 };
+

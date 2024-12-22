@@ -86,11 +86,10 @@ const Step3 = () => {
     const value = e.target.value;
     dispatch(updateFormData({ field: "DistrictId", value }));
   };
-
-  //______________________________________________
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
+    // Kiểm tra các lỗi đầu vào
     const phoneError = validatePhoneNumber(formData.PhoneNumber);
     const streetValidation = validateStreet(formData.Street);
     const regionValidation = validateRegion(formData.RegionId);
@@ -108,24 +107,19 @@ const Step3 = () => {
         formData1.append("Password", formData.Password);
         formData1.append("PhoneNumber", formData.PhoneNumber);
         formData1.append("Gender", formData.Gender);
-
         formData1.append("Year", formData.Year);
         formData1.append("Month", formData.Month);
         formData1.append("Day", formData.Day);
-
-        // Thêm các trường dữ liệu khác
         formData1.append("RegionId", formData.RegionId || "");
         formData1.append("CityId", formData.CityId || "");
         formData1.append("DistrictId", formData.DistrictId || "");
         formData1.append("Street", formData.Street || "");
-
+  
         // Tải ảnh từ URL và chuyển đổi thành File
         const response = await fetch(defaultAva.src);
         if (!response.ok) throw new Error("Failed to fetch default avatar");
         const blob = await response.blob();
         const file = new File([blob], "defaultAva.png", { type: blob.type });
-        console.log("ok",file)
-        // Thêm file vào FormData
         formData1.append("Picture", file);
   
         // Gửi dữ liệu
@@ -135,10 +129,23 @@ const Step3 = () => {
           contentType: "multipart/form-data",
         });
   
-        console.log("Success:", res.data);
-      } catch (error) {
-        console.error("Error submitting form:", error);
+        // Kiểm tra phản hồi từ API
+        if (res?.data?.success) {
+          console.log("Success:", res.data);
+          close(); // Đóng form khi đăng ký thành công
+        } else {
+          // Xử lý trường hợp đăng ký thất bại (nếu API trả lỗi)
+          console.error("Error:", res.data.message || "Unknown error");
+          alert(res.data.message || "Registration failed. Please try again.");
+        }
+      } catch (error: any) {
+        // Xử lý lỗi khi gửi request
+        console.error("Error submitting form:", error.message || error);
+        alert("An error occurred while submitting the form. Please try again.");
       }
+    } else {
+      // Hiển thị lỗi nếu đầu vào không hợp lệ
+      alert("Please fix the errors in the form before submitting.");
     }
   };
   

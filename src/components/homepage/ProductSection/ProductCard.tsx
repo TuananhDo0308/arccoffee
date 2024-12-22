@@ -1,3 +1,4 @@
+"use client"
 import React, { useRef } from "react";
 import {
   motion,
@@ -5,34 +6,41 @@ import {
   useMotionValue,
   useSpring,
 } from "framer-motion";
-import { FiMousePointer } from "react-icons/fi";
 import { useAppDispatch } from "@/src/hooks/hook";
-import { addToCart, CartItem } from "@/src/slices/cartSlice";
+import { addToCart } from "@/src/slices/cartSlice";
 import { addNotification } from "@/src/slices/UIcomponentSlice/NotificationSlice";
+import { clientLinks, httpClient } from "@/src/utils";
+import { useSession } from "next-auth/react";
 
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = 32.5 / 2;
 
 export const ProductCard = ({ product }: any) => {
   const ref = useRef(null);
-  const dispatch=useAppDispatch()
+  const { data: session } = useSession();
+  const dispatch = useAppDispatch()
+  
+  const addToDB = async () => {
+    const res = await httpClient.post({
+      url: clientLinks.cart.addToCart,
+      params: { prodId: product.id },
+    })
+    console.log(res.data)
+  }
+  
   const handleAddToCart = () => {
-    const addProduct: CartItem = {
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      quantity: 1, 
-    };
-    const id = Date.now(); // Tạo ID duy nhất cho thông báo
+    const id = Date.now();
     dispatch(
       addNotification({
         id,
         message: `${product.name} added to cart`,
       })
     );
-    dispatch(addToCart(product)); // Gọi hàm Redux để thêm sản phẩm vào giỏ hàng
+    if (session?.user?.accessToken)
+      addToDB();
+    dispatch(addToCart(product));
   };
+  
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -41,8 +49,8 @@ export const ProductCard = ({ product }: any) => {
 
   const transform = useMotionTemplate`rotateX(${xSpring}deg) rotateY(${ySpring}deg)`;
 
-  const handleMouseMove = (e) => {
-    if (!ref.current) return [0, 0];
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
 
     const rect = ref.current.getBoundingClientRect();
 
@@ -73,50 +81,49 @@ export const ProductCard = ({ product }: any) => {
         transformStyle: "preserve-3d",
         transform,
       }}
-      className="relative flex items-center justify-center h-[370px] w-[250px] rounded-3xl bg-white/30"
+      className="relative flex items-center justify-center w-full h-[370px] rounded-3xl bg-white/30"
     >
       <div
         style={{
           transform: "translateZ(50px)",
           transformStyle: "preserve-3d",
         }}
-        className="  w-[250px] h-[370px] bg-white rounded-2xl p-5 flex flex-col justify-start"
+        className="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-start"
       >
         <div
-          className="w-[210px] h-[240px] border-[1px] border-black rounded-t-xl overflow-hidden"
+          className="w-full h-[240px] border border-black rounded-t-xl overflow-hidden"
           style={{
             transform: "translateZ(20px)",
           }}
         >
-          <img src={product.image} className="w-full h-full object-cover" />
+          <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
         </div>
 
         <h3
-          className="font-bold mt-2 text-xl text-black"
+          className="font-bold mt-2 text-xl text-black truncate"
           style={{
             transform: "translateZ(20px)",
           }}
         >
           {product.name}
         </h3>
-        <p className="text-xs text-gray-500"style={{
-              transform: "translateZ(15px)",
-            }}>Stock: {product.stock}</p>
-        <div className="flex justify-between items-center "style={{
-              transform: "translateZ(20px)",
-            }}>
-          <p
-            
-            className="text-yellow-500 font-extrabold text-2xl"
-          >
+        <p className="text-xs text-gray-500" style={{
+          transform: "translateZ(15px)",
+        }}>Stock: {product.stock}</p>
+        <div className="flex justify-between items-center mt-auto" style={{
+          transform: "translateZ(20px)",
+        }}>
+          <p className="text-yellow-500 font-extrabold text-2xl">
             {product.price}
           </p>
 
-          <button className=" bg-black border-[1px] text-white py-2 px-4 rounded-full hover:border-black hover:bg-transparent hover:text-black"style={{
+          <button 
+            className="bg-black border border-black text-white py-2 px-4 rounded-full hover:bg-transparent hover:text-black transition-colors duration-300"
+            style={{
               transform: "translateZ(30px)",
-    
             }}
-            onClick={handleAddToCart}>
+            onClick={handleAddToCart}
+          >
             Add +
           </button>
         </div>
@@ -124,3 +131,4 @@ export const ProductCard = ({ product }: any) => {
     </motion.div>
   );
 };
+

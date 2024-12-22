@@ -14,6 +14,7 @@ import {
   } from "@nextui-org/react";
   import Icon from "@/src/assets/BagIcon.png";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function CartDrawer(){
   const open = useAppSelector((state) => state.cartUi.value);
@@ -35,9 +36,11 @@ export default function CartDrawer(){
                 <Button color="danger" variant="flat" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={onClose}>
-                  Sign in
-                </Button>
+                <Link href="./Checkout">
+                  <Button color="primary" variant="flat">
+                    Check out
+                  </Button>
+                </Link>
               </DrawerFooter>
             </>
           )}

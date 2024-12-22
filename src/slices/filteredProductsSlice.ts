@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Định nghĩa kiểu dữ liệu cho sản phẩm
 interface Product {
-  id: number;
+  productId: number;
   name: string;
   categoryName: string;
   // Thêm các thuộc tính khác nếu cần

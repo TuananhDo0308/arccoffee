@@ -8,6 +8,7 @@ import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Logo from "@/src/assets/SingleLogoblack.png";
 import { clientLinks, httpClient } from "@/src/utils";
+import { clearCart, setCart } from "@/src/slices/cartSlice";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,23 +30,67 @@ export default function SignIn() {
 
   const handleLogin = async (e: React.MouseEvent) => {
     e.preventDefault();
-    // const res = await httpClient.post({
-    //   url: clientLinks.user.signin,
-    //   data: {
-    //     login: email,
-    //     password: password,
-    //   },
-    // });
-    signIn("credentials", {
+  
+    const result = await signIn("credentials", {
       email: email,
       password: password,
       redirect: false, // Tùy chọn này để không tự động chuyển hướng
-    })
-
-   
-    // console.log("Login successful:", res.data);
-    close();
+    });
+  
+    if (result?.ok) {
+      fetchCart();
+      close(); // Chỉ đóng khi đăng nhập thành công
+    } else {
+      console.error("Login failed:", result?.error);
+      alert("Login failed. Please check your email and password."); // Thông báo lỗi
+    }
   };
+  const data=useAppSelector(state=>state.cart.items)
+  const items = data.map(item => ({
+    productId: item.productId, // Chỉ lấy productId
+    quantity: item.quantity,   // Chỉ lấy quantity
+  }));
+  const fetchCart = async () => {
+    try {
+      let result = null;
+  
+      // Nếu data trống, gọi API GET để lấy giỏ hàng
+      if (items.length === 0) {
+        const response = await httpClient.get({
+          url: clientLinks.cart.cart,
+        });
+        result = response.data?.data; 
+      } 
+      // Nếu data có sản phẩm, gọi API POST để cập nhật giỏ hàng
+      else {
+        const items = data.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        }));
+  
+        const response = await httpClient.post({
+          url: clientLinks.cart.addListCart,
+          data: { items },
+        });
+        result = response.data?.data.data; // Giả định server trả về { data: { ... } }
+      }
+  
+      console.log("Result:", result);
+  
+      // Kiểm tra kết quả từ server
+      if (result) {
+        const { items, totalPrice } = result; // Đúng cấp độ truy cập
+        dispatch(setCart({ items, totalPrice }));
+      }
+  
+      console.log("Cart data loaded successfully!");
+      close(); // Đóng khi hoàn tất
+    } catch (error) {
+      console.error("Error loading cart:", error);
+      alert("Failed to load cart data.");
+    }
+  };
+  
 
   const handleLoginGoogle = (e: React.MouseEvent) => {
     e.preventDefault();

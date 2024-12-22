@@ -1,15 +1,17 @@
 import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
 import { httpClient, apiLinks } from '@/src/utils';
+import { auth } from '@/auth';
 
 export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
     const { id } = params; // Lấy id từ URL
 
     try {
-        const token = req.headers.get('Authorization');
-        // Gọi API và truyền id vào URL động
-        const response = await httpClient.get({
-            url: `${apiLinks.voucher.getDetailVoucher}/${id}`, // Đường dẫn động
+    const session=await auth()
+    const token =session?.user?.accessToken        
+    const response = await httpClient.get({
+            url: apiLinks.voucher.getDetailVoucher, 
+            params:{id:id},
             token: token
         });
 

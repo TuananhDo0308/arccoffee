@@ -1,19 +1,17 @@
 import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
 import { httpClient, apiLinks } from '@/src/utils';
+import { auth } from '@/auth';
 
 export const POST = async (req: NextRequest) => {
-    // Lấy id từ query parameters
     const url = new URL(req.url);
-    const id = url.searchParams.get('id'); // Lấy giá trị của query parameter 'id'
-    
-    try {
-        const token = req.headers.get('Authorization');
-        
+    const prodId = url.searchParams.get('prodId'); // Lấy giá trị của query parameter 'id'
+    const session=await auth()
+    const token =session?.user?.accessToken
+    try {        
         const response = await httpClient.post({
-            url: `${apiLinks.cart.addToCart}`,
-            params: {prodId: id},
-            
+            url: apiLinks.cart.addToCart,
+            params: {prodId: prodId},
             token: token
         });
 
