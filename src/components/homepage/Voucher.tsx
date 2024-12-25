@@ -5,7 +5,7 @@ import { useWindowSize } from "./windowsize";
 import { clientLinks, httpClient } from "@/src/utils";
 
 const VerticalAccordion = () => {
-  const [vouchers, setVouchers] = useState([]);
+  const [vouchers, setVouchers] = useState<any[]>([]);
   const [open, setOpen] = useState<string | null>(null);
 
   useEffect(() => {
