@@ -1,12 +1,13 @@
 "use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import ProductGrid from "./ProductSection/ProductList";
-import { SlideTabs } from "../Tabs";
+
 import { SearchBox } from "../SearchInput";
+import { SlideTabs } from "../Tabs";
+import ProductGrid from "./ProductSection/ProductList";
 import SearchPopup from "./SearchPopUp";
-import { useAppSelector } from "@/src/hooks/hook";
 import AiIcon from "@/src/assets/AiIcon";
+import { useAppSelector } from "@/src/hooks/hook";
+import { motion } from "framer-motion";
+import { useState } from "react";
 
 export default function ProductSection() {
   const { products, message } = useAppSelector(
@@ -20,12 +21,7 @@ export default function ProductSection() {
     <div className="py-5 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto">
         <div className="text-white">
-          <motion.div
-            initial={{ y: 48, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ ease: "easeInOut", duration: 0.75 }}
-            className="mb-6 sm:mb-11"
-          >
+          <div className="mb-6 sm:mb-11">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
               <SlideTabs />
 
@@ -34,20 +30,17 @@ export default function ProductSection() {
                 <DottedButton onClick={() => setIsSearchOpen(true)} />
               </div>
             </div>
-          </motion.div>
-          
+          </div>
+
           {message && (
-            <p className="text-white font-medium text-base sm:text-lg px-2 sm:px-10 mb-5">{message}</p>
+            <p className="text-white font-medium text-base sm:text-lg px-2 sm:px-10 mb-5">
+              {message}
+            </p>
           )}
 
-          <motion.div
-            initial={{ y: 48, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ ease: "easeInOut", duration: 0.75 }}
-            className="mb-9 border-b border-zinc-800 pb-9"
-          >
+          <div className="mb-9 border-b border-zinc-800 pb-9">
             <ProductGrid />
-          </motion.div>
+          </div>
         </div>
       </div>
 
@@ -77,7 +70,9 @@ const DottedButton = ({ onClick }: { onClick: () => void }) => {
       {isHovered ? (
         <div className="flex gap-1 items-center">
           <AiIcon />
-          <span className="text-white font-semibold text-xs sm:text-sm">AI Chat</span>
+          <span className="text-white font-semibold text-xs sm:text-sm">
+            AI Chat
+          </span>
         </div>
       ) : (
         <AiIcon />
@@ -85,4 +80,3 @@ const DottedButton = ({ onClick }: { onClick: () => void }) => {
     </button>
   );
 };
-

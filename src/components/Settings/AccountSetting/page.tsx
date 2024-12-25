@@ -79,7 +79,7 @@ const AccountSettings = ({boxShadow,shadow}:any) => {
   };
 
   const handleRegionChange = (e: any) => {
-    const value = e.target.value;
+    const value = e.target.v;
     const selectedRegion = regions?.find((region) => region.id === value);
   
     // Lấy city đầu tiên và district đầu tiên của region mới
@@ -129,6 +129,7 @@ const AccountSettings = ({boxShadow,shadow}:any) => {
   
   const handleDistrictChange = (e: any) => {
     handleInputChange(e);
+    
   };
 
   // Handle Input Change

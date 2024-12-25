@@ -1,6 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Card, CardBody, CardHeader, Button } from "@nextui-org/react";
 
 interface DiscountCodeProps {
   discountCode: string;
@@ -9,11 +8,11 @@ interface DiscountCodeProps {
 
 export function DiscountCode({ discountCode, setDiscountCode }: DiscountCodeProps) {
   return (
-    <Card className="bg-zinc-900 border-zinc-800 shadow-lg hover:shadow-zinc-800/30 transition-shadow">
+    <Card className="bg-zinc-900 border-zinc-800 shadow-xl text-white hover:shadow-zinc-800/30 p-2  transition-shadow">
       <CardHeader className="border-b border-zinc-800">
-        <CardTitle>Mã giảm giá</CardTitle>
+        <h4 className="font-bold text-xl">Mã giảm giá</h4>
       </CardHeader>
-      <CardContent className="space-y-4 pt-6">
+      <CardBody className="space-y-4 pt-6">
         <div className="flex gap-2">
           <Input
             placeholder="Nhập mã giảm giá"
@@ -22,10 +21,9 @@ export function DiscountCode({ discountCode, setDiscountCode }: DiscountCodeProp
             className="bg-zinc-800 border-zinc-700 focus:border-zinc-600"
           />
           <Button
-            variant="secondary"
-            className="bg-zinc-800 hover:bg-zinc-700"
+            className="bg-zinc-800 hover:bg-zinc-700 text-white"
           >
-            Áp dụng
+            Apply
           </Button>
         </div>
         {discountCode === "ARC10" && (
@@ -33,7 +31,7 @@ export function DiscountCode({ discountCode, setDiscountCode }: DiscountCodeProp
             Giảm giá 10% đã được áp dụng!
           </p>
         )}
-      </CardContent>
+      </CardBody>
     </Card>
   );
 }

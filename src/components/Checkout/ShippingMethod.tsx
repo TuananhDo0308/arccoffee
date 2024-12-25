@@ -1,7 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Skeleton } from "@/components/ui/skeleton";
+import React from 'react';
 
 interface ShippingOption {
   id: string;
@@ -19,47 +16,43 @@ interface ShippingMethodProps {
 
 export function ShippingMethod({ shippingMethod, setShippingMethod, shippingOptions, isLoading }: ShippingMethodProps) {
   return (
-    <Card className="bg-zinc-900 border-zinc-800 shadow-lg hover:shadow-zinc-800/30 transition-shadow">
-      <CardHeader className="border-b border-zinc-800">
-        <CardTitle>Phương thức vận chuyển</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-6">
+    <div className="bg-zinc-900 border border-zinc-800 rounded-lg shadow-lg">
+      <div className="border-b border-zinc-800 p-4">
+        <h4 className="text-xl font-bold text-white">Phương thức vận chuyển</h4>
+      </div>
+      <div className="p-4">
         {isLoading ? (
           <div className="space-y-4">
-            <Skeleton className="h-16 w-full bg-zinc-800" />
-            <Skeleton className="h-16 w-full bg-zinc-800" />
+            <div className="h-16 w-full bg-zinc-800 animate-pulse rounded-lg"></div>
+            <div className="h-16 w-full bg-zinc-800 animate-pulse rounded-lg"></div>
           </div>
         ) : (
-          <RadioGroup
-            value={shippingMethod}
-            onValueChange={setShippingMethod}
-            className="space-y-4"
-          >
+          <div className="space-y-4">
             {shippingOptions.map((option) => (
-              <div
+              <label
                 key={option.id}
-                className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors"
+                className="flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-2">
-                  <RadioGroupItem value={option.id} id={option.id} />
+                  <input
+                    type="radio"
+                    name="shippingMethod"
+                    value={option.id}
+                    checked={shippingMethod === option.id}
+                    onChange={() => setShippingMethod(option.id)}
+                    className="form-radio text-blue-500 focus:ring-blue-500 focus:ring-offset-zinc-900"
+                  />
                   <div>
-                    <Label htmlFor={option.id}>{option.name}</Label>
-                    <p className="text-sm text-zinc-400">
-                      {option.description || "Không có mô tả"}
-                    </p>
+                    <p className="font-medium text-white">{option.name}</p>
                   </div>
                 </div>
-                <span>
-                  {option.price
-                    ? `${option.price.toLocaleString()}đ`
-                    : "Miễn phí"}
-                </span>
-              </div>
+          
+              </label>
             ))}
-          </RadioGroup>
+          </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 

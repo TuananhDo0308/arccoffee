@@ -47,12 +47,6 @@ export default function Navbar() {
               className="object-cover"
             />
           </div>
-          <button
-            onClick={() => signOut()}
-            className="bg-white text-black px-4 py-2 rounded-full font-medium inline-block hover:bg-transparent border-2 hover:border-red-500 hover:text-red-500 transition-colors duration-300"
-          >
-            Sign Out
-          </button>
         </Link>
       ) : (
         <button

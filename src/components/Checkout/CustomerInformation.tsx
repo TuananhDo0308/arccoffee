@@ -1,21 +1,38 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import React from 'react';
+
+interface SelectOption {
+  id: string;
+  name: string;
+}
+
+interface City {
+  id: string;
+  name: string;
+  districts: { id: string; name: string }[];
+}
+
+interface Region {
+  id: string;
+  name: string;
+  cities: City[];
+}
 
 interface CustomerInformationProps {
   customerNote: string;
   setCustomerNote: (note: string) => void;
   address: string;
   setAddress: (address: string) => void;
-  ward: string;
-  setWard: (ward: string) => void;
   district: string;
-  setDistrict: (district: string) => void;
+  setDistrict: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   city: string;
-  setCity: (city: string) => void;
+  setCity: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   phoneNumber: string;
   setPhoneNumber: (phoneNumber: string) => void;
+  cityOptions: City[];
+  districtOptions: SelectOption[];
+  region: string;
+  setRegion: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  regionOptions: Region[];
 }
 
 export function CustomerInformation({
@@ -23,94 +40,122 @@ export function CustomerInformation({
   setCustomerNote,
   address,
   setAddress,
-  ward,
-  setWard,
   district,
   setDistrict,
   city,
   setCity,
   phoneNumber,
   setPhoneNumber,
+  cityOptions,
+  districtOptions,
+  region,
+  setRegion,
+  regionOptions,
 }: CustomerInformationProps) {
   return (
-    <Card className="bg-zinc-900 border-zinc-800 shadow-lg hover:shadow-zinc-800/30 transition-shadow">
-      <CardHeader className="border-b border-zinc-800">
-        <CardTitle>Thông tin khách hàng</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4 pt-6">
-        <div className="space-y-2">
-          <Label htmlFor="customerNote">Ghi chú</Label>
-          <Input
+    <div className="bg-zinc-900 border border-zinc-800 rounded-lg shadow-lg">
+      <div className="border-b border-zinc-800 p-4">
+        <h4 className="text-xl font-bold text-white">Thông tin khách hàng</h4>
+      </div>
+      <div className="p-4 space-y-4">
+        <div>
+          <label htmlFor="customerNote" className="block text-sm font-medium text-white mb-1">
+            Ghi chú
+          </label>
+          <input
             id="customerNote"
+            type="text"
             placeholder="Nhập ghi chú của bạn"
             value={customerNote}
             onChange={(e) => setCustomerNote(e.target.value)}
-            className="bg-zinc-800 border-zinc-700 focus:border-zinc-600"
+            className="w-full bg-zinc-800 border border-zinc-700 rounded-md p-2 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="address">Địa chỉ</Label>
-          <Input
+        <div>
+          <label htmlFor="address" className="block text-sm font-medium text-white mb-1">
+            Địa chỉ
+          </label>
+          <input
             id="address"
+            type="text"
             placeholder="Nhập địa chỉ của bạn"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className="bg-zinc-800 border-zinc-700 focus:border-zinc-600"
+            className="w-full bg-zinc-800 border border-zinc-700 rounded-md p-2 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="grid grid-cols-3 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="city">Thành phố</Label>
-            <Select value={city} onValueChange={setCity}>
-              <SelectTrigger className="bg-zinc-800 border-zinc-700">
-                <SelectValue placeholder="Chọn thành phố" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="hanoi">Hà Nội</SelectItem>
-                <SelectItem value="hcm">TP. Hồ Chí Minh</SelectItem>
-                <SelectItem value="danang">Đà Nẵng</SelectItem>
-              </SelectContent>
-            </Select>
+        <div>
+            <label htmlFor="region" className="block text-sm font-medium text-white mb-1">
+              Vùng
+            </label>
+            <select
+              id="region"
+              value={region}
+              onChange={setRegion}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-md p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Chọn vùng</option>
+              {regionOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="district">Quận/Huyện</Label>
-            <Select value={district} onValueChange={setDistrict}>
-              <SelectTrigger className="bg-zinc-800 border-zinc-700">
-                <SelectValue placeholder="Chọn quận/huyện" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="district1">Quận 1</SelectItem>
-                <SelectItem value="district2">Quận 2</SelectItem>
-                <SelectItem value="district3">Quận 3</SelectItem>
-              </SelectContent>
-            </Select>
+          <div>
+            <label htmlFor="city" className="block text-sm font-medium text-white mb-1">
+              Thành phố
+            </label>
+            <select
+              id="city"
+              value={city}
+              onChange={setCity}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-md p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Chọn thành phố</option>
+              {cityOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="ward">Phường/Xã</Label>
-            <Select value={ward} onValueChange={setWard}>
-              <SelectTrigger className="bg-zinc-800 border-zinc-700">
-                <SelectValue placeholder="Chọn phường/xã" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ward1">Phường 1</SelectItem>
-                <SelectItem value="ward2">Phường 2</SelectItem>
-                <SelectItem value="ward3">Phường 3</SelectItem>
-              </SelectContent>
-            </Select>
+          <div>
+            <label htmlFor="district" className="block text-sm font-medium text-white mb-1">
+              Quận/Huyện
+            </label>
+            <select
+              id="district"
+              value={district}
+              onChange={setDistrict}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-md p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Chọn quận/huyện</option>
+              {districtOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
           </div>
+         
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="phoneNumber">Số điện thoại</Label>
-          <Input
+        <div>
+          <label htmlFor="phoneNumber" className="block text-sm font-medium text-white mb-1">
+            Số điện thoại
+          </label>
+          <input
             id="phoneNumber"
+            type="tel"
             placeholder="Nhập số điện thoại của bạn"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
-            className="bg-zinc-800 border-zinc-700 focus:border-zinc-600"
+            className="w-full bg-zinc-800 border border-zinc-700 rounded-md p-2 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 

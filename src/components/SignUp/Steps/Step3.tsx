@@ -7,7 +7,6 @@ import { apiLinks, clientLinks, httpClient } from "@/src/utils";
 import Icon2 from "@/src/assets/tickIcon.png";
 import Icon from "@/src/assets/icon.png";
 import Image from "next/image";
-import defaultAva from "@/src/assets/user.png"
 interface City {
   id: string;
   name: string;
@@ -86,6 +85,7 @@ const Step3 = () => {
     const value = e.target.value;
     dispatch(updateFormData({ field: "DistrictId", value }));
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
@@ -99,55 +99,15 @@ const Step3 = () => {
     setRegionError(regionValidation);
   
     if (!phoneError && !streetValidation && !regionValidation) {
-      try {
-        // Tạo FormData
-        const formData1 = new FormData();
-        formData1.append("Name", formData.Name || "");
-        formData1.append("Email", formData.Email);
-        formData1.append("Password", formData.Password);
-        formData1.append("PhoneNumber", formData.PhoneNumber);
-        formData1.append("Gender", formData.Gender);
-        formData1.append("Year", formData.Year);
-        formData1.append("Month", formData.Month);
-        formData1.append("Day", formData.Day);
-        formData1.append("RegionId", formData.RegionId || "");
-        formData1.append("CityId", formData.CityId || "");
-        formData1.append("DistrictId", formData.DistrictId || "");
-        formData1.append("Street", formData.Street || "");
-  
-        // Tải ảnh từ URL và chuyển đổi thành File
-        const response = await fetch(defaultAva.src);
-        if (!response.ok) throw new Error("Failed to fetch default avatar");
-        const blob = await response.blob();
-        const file = new File([blob], "defaultAva.png", { type: blob.type });
-        formData1.append("Picture", file);
-  
-        // Gửi dữ liệu
-        const res = await httpClient.post({
-          url: clientLinks.user.register,
-          data: formData1,
-          contentType: "multipart/form-data",
-        });
-  
-        // Kiểm tra phản hồi từ API
-        if (res?.data?.success) {
-          console.log("Success:", res.data);
-          close(); // Đóng form khi đăng ký thành công
-        } else {
-          // Xử lý trường hợp đăng ký thất bại (nếu API trả lỗi)
-          console.error("Error:", res.data.message || "Unknown error");
-          alert(res.data.message || "Registration failed. Please try again.");
-        }
-      } catch (error: any) {
-        // Xử lý lỗi khi gửi request
-        console.error("Error submitting form:", error.message || error);
-        alert("An error occurred while submitting the form. Please try again.");
-      }
+          dispatch(setCurrentStep(4)); // Proceed to the next step
+
     } else {
-      // Hiển thị lỗi nếu đầu vào không hợp lệ
       alert("Please fix the errors in the form before submitting.");
     }
   };
+
+
+
   
 
   return (

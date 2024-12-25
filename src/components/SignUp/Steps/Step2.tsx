@@ -69,9 +69,10 @@ const Step2 = () => {
     setConfirmPasswordError(confirmPasswordValidation);
 
     if (!emailValidation && !passwordValidation && !confirmPasswordValidation) {
-      nextStep(); // Proceed to the next step or submit the data
+      dispatch(setCurrentStep(3)); // Move to email verification step
     }
   };
+
 
   return (
     <Form className="flex flex-col gap-5 w-full" onSubmit={handleSubmit}>

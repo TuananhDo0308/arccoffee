@@ -21,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="relative">
       <body className={clsx(montserrat.className)}>
+  
+
         {" "}
         <SessionProvider>
-          <ReduxProvider>
+          <ReduxProvider>    
             {children} 
             </ReduxProvider>
         </SessionProvider>

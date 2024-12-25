@@ -9,6 +9,7 @@ import Image from "next/image";
 import Logo from "@/src/assets/SingleLogoblack.png";
 import { clientLinks, httpClient } from "@/src/utils";
 import { clearCart, setCart } from "@/src/slices/cartSlice";
+import { login } from "@/src/slices/authSlice";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +31,7 @@ export default function SignIn() {
 
   const handleLogin = async (e: React.MouseEvent) => {
     e.preventDefault();
-  
+    dispatch(login());
     const result = await signIn("credentials", {
       email: email,
       password: password,
@@ -59,6 +60,7 @@ export default function SignIn() {
         const response = await httpClient.get({
           url: clientLinks.cart.cart,
         });
+        console.log("Result:", response.data);
         result = response.data?.data; 
       } 
       // Nếu data có sản phẩm, gọi API POST để cập nhật giỏ hàng

@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MinusIcon, PlusIcon, Trash2Icon } from 'lucide-react';
+import { Card, CardBody, CardHeader, Button } from "@nextui-org/react";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import Image from "next/image";
 
 interface CartItem {
   productId: string;
@@ -16,26 +16,29 @@ interface CartReviewProps {
   removeItem: (id: string) => void;
 }
 
-export function CartReview({ cartItems, updateQuantity, removeItem }: CartReviewProps) {
+export function CartReview({
+  cartItems,
+  updateQuantity,
+  removeItem,
+}: CartReviewProps) {
   return (
-    <Card className="bg-zinc-900 border-zinc-800 shadow-lg hover:shadow-zinc-800/30 transition-shadow">
-      <CardHeader className="border-b border-zinc-800">
-        <CardTitle>Giỏ hàng của bạn</CardTitle>
+    <Card className="bg-zinc-900 border-zinc-800 p-2 shadow-lg">
+      <CardHeader className="border-b border-zinc-800 text-white">
+        <h4 className="text-xl font-bold">Your Cart</h4>
       </CardHeader>
-      <CardContent className="space-y-4 max-h-[800px] overflow-y-auto pt-6">
+      <CardBody className="space-y-4 max-h-[800px] overflow-y-auto">
         {cartItems.map((item) => (
           <div
             key={item.productId}
-            className="flex items-center gap-4 p-4 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors"
+            className="flex items-center gap-4 p-4 rounded-xl text-white bg-zinc-800/50"
           >
-            <div className="h-20 w-20 bg-zinc-700 rounded-lg overflow-hidden">
-              {item.image && (
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="h-full w-full object-cover"
-                />
-              )}
+            <div className="relative h-[100px] w-[100px] border-r-1 border-black">
+              <Image
+                src={`${item.image}`}
+                alt={item.name}
+                className="object-cover rounded-lg"
+                layout="fill"
+              />
             </div>
             <div className="flex-1 space-y-1">
               <h3 className="font-medium">{item.name}</h3>
@@ -45,35 +48,36 @@ export function CartReview({ cartItems, updateQuantity, removeItem }: CartReview
             </div>
             <div className="flex items-center gap-2">
               <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8 bg-zinc-800 hover:bg-zinc-700"
-                onClick={() => updateQuantity(item.productId, -1)}
+                isIconOnly
+                size="sm"
+                variant="flat"
+                color="default"
+                onPress={() => updateQuantity(item.productId, -1)}
               >
-                <MinusIcon className="h-4 w-4" />
+                <Minus color="white" size={16} />
               </Button>
               <span className="w-8 text-center">{item.quantity}</span>
               <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8 bg-zinc-800 hover:bg-zinc-700"
-                onClick={() => updateQuantity(item.productId, 1)}
+                isIconOnly
+                size="sm"
+                variant="flat"
+                onPress={() => updateQuantity(item.productId, 1)}
               >
-                <PlusIcon className="h-4 w-4" />
+                <Plus color="white" size={16} />
               </Button>
               <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-red-500 hover:text-red-400 hover:bg-red-500/10"
-                onClick={() => removeItem(item.productId)}
+                isIconOnly
+                size="sm"
+                color="danger"
+                variant="light"
+                onPress={() => removeItem(item.productId)}
               >
-                <Trash2Icon className="h-4 w-4" />
+                <Trash2 size={16} />
               </Button>
             </div>
           </div>
         ))}
-      </CardContent>
+      </CardBody>
     </Card>
   );
 }
-

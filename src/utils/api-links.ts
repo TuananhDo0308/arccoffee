@@ -21,10 +21,11 @@ const apiLinks = {
     addToCart: `${authUrl}/api/orders/new-item`,//
     deleteItem: `${authUrl}/api/orders`,//
     addListCart: `${authUrl}/api/orders/all-items`,//
-
+    updateQuantity: `${authUrl}/api/orders`,
   },
 
   bill: {
+    placeOrder: `${authUrl}/api/bills/payment`,//
     getBills: `${authUrl}/api/bills`,
     getCompletedBills: `${authUrl}/api/bills/completed-bills`,
     getPendingBills: `${authUrl}/api/bills/pending-bills`,
@@ -40,7 +41,7 @@ const apiLinks = {
   },
 
   voucher: {
-    getVouchers: `${authUrl}/api/vouchers`,
+    getVouchers: `${authUrl}/api/vouchers/public`,
     getDetailVoucher: `${authUrl}/api/vouchers`,
   },
 };

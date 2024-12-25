@@ -1,3 +1,4 @@
+import { StarryBackground } from '@/src/components/StarryBackground'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -11,9 +12,11 @@ export default function SettingsLayout({
   children: React.ReactNode
 }) {
   return (
-    <>
-      <main className="min-h-screen bg-black text-white pt-20">
+    <>        
+      <main className="min-h-screen text-white ">
+      
         {children}
+
       </main>
     </>
   )

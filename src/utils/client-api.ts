@@ -23,9 +23,11 @@ const clientLinks = {
     deleteItem: `${clientUrl}/api/user/cart/deleteitem`,
     addToCart: `${clientUrl}/api/user/cart/addtocart`,
     addListCart: `${clientUrl}/api/user/cart/addListCart`,
+    updateQuantity: `${clientUrl}/api/user/cart/updateQuantity`,
   },
 
-  bill: {
+  bill: {    
+    placeOrder: `${clientUrl}/api/user/bills/placeOrder`,
     completedBills: `${clientUrl}/api/user/bills/completedbills`,
     pendingBills: `${clientUrl}/api/user/bills/pendingbills`,
     detailBill: `${clientUrl}/api/user/bills/detail`,

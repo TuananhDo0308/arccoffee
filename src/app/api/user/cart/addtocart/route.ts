@@ -7,6 +7,7 @@ export const POST = async (req: NextRequest) => {
     const url = new URL(req.url);
     const prodId = url.searchParams.get('prodId'); // Lấy giá trị của query parameter 'id'
     const session=await auth()
+    console.log(prodId)
     const token =session?.user?.accessToken
     try {        
         const response = await httpClient.post({

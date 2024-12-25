@@ -1,4 +1,4 @@
-  'use client'
+'use client'
 
 import { useEffect, useState } from "react"
 import { clientLinks, httpClient } from "@/src/utils"
@@ -26,14 +26,14 @@ interface OrderItem {
 }
 
 
-export function OrderHistoryTab() {
+export function OrderTrackingTab() {
   const [orders, setOrders] = useState<Order[]>([])
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await httpClient.get({url:clientLinks.bill.completedBills});
+        const response = await httpClient.get({url:clientLinks.bill.pendingBills});
         setOrders(response.data.data);
       } catch (error) {
         console.error("Error fetching orders:", error);

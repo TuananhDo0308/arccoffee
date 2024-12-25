@@ -49,6 +49,9 @@ const httpClient = {
   delete: (arg: Options): Promise<AxiosResponse> => {
     return request({ ...arg, method: 'DELETE' });
   },
+  patch: (arg: Options): Promise<AxiosResponse> => {
+    return request({ ...arg, method: 'PATCH' }); 
+  },
 };
 
 export default httpClient;

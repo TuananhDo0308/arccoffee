@@ -1,7 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Skeleton } from "@/components/ui/skeleton";
+import React from 'react';
 
 interface PaymentOption {
   id: string;
@@ -18,36 +15,39 @@ interface PaymentMethodProps {
 
 export function PaymentMethod({ paymentMethod, setPaymentMethod, paymentOptions, isLoading }: PaymentMethodProps) {
   return (
-    <Card className="bg-zinc-900 border-zinc-800 shadow-lg hover:shadow-zinc-800/30 transition-shadow">
-      <CardHeader className="border-b border-zinc-800">
-        <CardTitle>Phương thức thanh toán</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-6">
+    <div className="bg-zinc-900 border border-zinc-800 rounded-lg shadow-lg">
+      <div className="border-b border-zinc-800 p-4">
+        <h4 className="text-xl font-bold text-white">Phương thức thanh toán</h4>
+      </div>
+      <div className="p-4">
         {isLoading ? (
           <div className="space-y-4">
-            <Skeleton className="h-12 w-full bg-zinc-800" />
-            <Skeleton className="h-12 w-full bg-zinc-800" />
-            <Skeleton className="h-12 w-full bg-zinc-800" />
+            <div className="h-12 w-full bg-zinc-800 animate-pulse rounded-lg"></div>
+            <div className="h-12 w-full bg-zinc-800 animate-pulse rounded-lg"></div>
+            <div className="h-12 w-full bg-zinc-800 animate-pulse rounded-lg"></div>
           </div>
         ) : (
-          <RadioGroup
-            value={paymentMethod}
-            onValueChange={setPaymentMethod}
-            className="space-y-4"
-          >
+          <div className="space-y-4">
             {paymentOptions.map((option) => (
-              <div
+              <label
                 key={option.id}
-                className="flex items-center gap-2 p-4 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors"
+                className="flex items-center gap-2 p-4 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors cursor-pointer"
               >
-                <RadioGroupItem value={option.id} id={option.id} />
-                <Label htmlFor={option.id}>{option.name}</Label>
-              </div>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value={option.id}
+                  checked={paymentMethod === option.id}
+                  onChange={() => setPaymentMethod(option.id)}
+                  className="form-radio text-blue-500 focus:ring-blue-500 focus:ring-offset-zinc-900"
+                />
+                <span className="text-white">{option.name}</span>
+              </label>
             ))}
-          </RadioGroup>
+          </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 

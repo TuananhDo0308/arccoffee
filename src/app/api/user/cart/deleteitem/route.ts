@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
 import { httpClient, apiLinks } from '@/src/utils';
+import { auth } from '@/auth';
 
 export const DELETE = async (req: NextRequest) => {
     // Lấy id từ query parameters
@@ -8,8 +9,8 @@ export const DELETE = async (req: NextRequest) => {
     const id = url.searchParams.get('id'); // Lấy giá trị của query parameter 'id'
     
     try {
-        const token = req.headers.get('Authorization');
-        
+        const session = await auth();
+        const token = session?.user?.accessToken;        
         const response = await httpClient.delete({
             url: `${apiLinks.cart.deleteItem}`,
             params: {prodId: id},

@@ -3,23 +3,23 @@ import axios from 'axios';
 import { httpClient, apiLinks } from '@/src/utils';
 import { auth } from '@/auth';
 
-export const POST = async (req: NextRequest) => {
+export const PUT = async (req: NextRequest) => {
     const session=await auth()
     const token =session?.user?.accessToken
 
     try {        
         const body = await req.json();
-        const { items } = body;  
-   
-        const response = await httpClient.post({
-            url: apiLinks.cart.addListCart,
-            token: token,
-            data:items
-        });
-        const data = response.data;
+        const data = body;  
         console.log("data:",data)
-
-        return NextResponse.json({ data }, { status: 200 });
+   
+        const response = await httpClient.put({
+            url: apiLinks.bill.placeOrder,
+            token: token,
+            data:data
+        });
+        const res = response.data;
+        
+        return NextResponse.json({ res }, { status: 200 });
     } catch (error) {
         console.error('Error during get api:', error);
 

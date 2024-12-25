@@ -13,7 +13,7 @@ import notiReducer from '../slices/UIcomponentSlice/NotificationSlice'
 import signUpDataReducer from '../slices/signUpFormdata'
 import cartReducer from '../slices/cartSlice'
 import auth from '../slices/authSlice'
-
+import tabFilter from '../slices/tabFilterSlice'
 
 
 import { sign } from 'crypto';
@@ -33,6 +33,7 @@ const rootReducer = combineReducers({
   cart:cartReducer,
   signupData:signUpDataReducer,
   notification:notiReducer,
+  tabFilter:tabFilter,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

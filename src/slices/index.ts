@@ -4,7 +4,7 @@ import signup from './UIcomponentSlice/SignupPopUpSlice'
 import cartUI from './UIcomponentSlice/cartUiSlice'
 import noti from './UIcomponentSlice/NotificationSlice'
 import signupData from './cartSlice'
-
+import tabFilter from './tabFilterSlice'
 import cart from './signUpFormdata'
 
 import filteredproducts from './filteredProductsSlice'
@@ -17,4 +17,5 @@ export default {
   signup,
   signupData,
   noti,
+  tabFilter
 };

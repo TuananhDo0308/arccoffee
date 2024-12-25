@@ -7,38 +7,40 @@ import {
   useSpring,
 } from "framer-motion";
 import { useAppDispatch } from "@/src/hooks/hook";
-import { addToCart } from "@/src/slices/cartSlice";
 import { addNotification } from "@/src/slices/UIcomponentSlice/NotificationSlice";
 import { clientLinks, httpClient } from "@/src/utils";
 import { useSession } from "next-auth/react";
+import { addToCartThunk } from "@/src/slices/cartThunk";
+import Image from "next/image";
 
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = 32.5 / 2;
 
 export const ProductCard = ({ product }: any) => {
   const ref = useRef(null);
-  const { data: session } = useSession();
   const dispatch = useAppDispatch()
-  
-  const addToDB = async () => {
-    const res = await httpClient.post({
-      url: clientLinks.cart.addToCart,
-      params: { prodId: product.id },
-    })
-    console.log(res.data)
-  }
+
   
   const handleAddToCart = () => {
     const id = Date.now();
-    dispatch(
-      addNotification({
-        id,
-        message: `${product.name} added to cart`,
-      })
-    );
-    if (session?.user?.accessToken)
-      addToDB();
-    dispatch(addToCart(product));
+ 
+    dispatch(addToCartThunk(product))
+    .unwrap()
+    .then(() => {
+      dispatch(
+        addNotification({
+          id,
+          message: `${product.name} added to cart`,
+        })
+      );    })
+    .catch((error) => {
+      dispatch(
+        addNotification({
+          id,
+          message: `${product.name} failed add to cart`,
+        })
+      );
+    });
   };
   
   const x = useMotionValue(0);
@@ -73,14 +75,8 @@ export const ProductCard = ({ product }: any) => {
   };
 
   return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        transformStyle: "preserve-3d",
-        transform,
-      }}
+    <div
+     
       className="relative flex items-center justify-center w-full h-[370px] rounded-3xl bg-white/30"
     >
       <div
@@ -96,7 +92,7 @@ export const ProductCard = ({ product }: any) => {
             transform: "translateZ(20px)",
           }}
         >
-          <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+          <Image src={product.image} layout="fill" alt={product.name} quality={10} loading="lazy" className="object-cover" />
         </div>
 
         <h3
@@ -128,7 +124,7 @@ export const ProductCard = ({ product }: any) => {
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
