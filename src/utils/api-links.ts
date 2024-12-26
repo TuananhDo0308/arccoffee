@@ -42,7 +42,7 @@ const apiLinks = {
 
   voucher: {
     getVouchers: `${authUrl}/api/vouchers/public`,
-    getDetailVoucher: `${authUrl}/api/vouchers`,
+    getDetailVoucher: `${authUrl}/api/vouchers/detail`,
   },
 };
 

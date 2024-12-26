@@ -13,8 +13,6 @@ export const POST = async (request: NextRequest) => {
     });
 
     const data = response.data;
-debugger
-    // Return success response
     return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
     console.error('Error during authentication:', error);

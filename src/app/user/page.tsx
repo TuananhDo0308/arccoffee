@@ -10,7 +10,6 @@ import { useAppDispatch } from '@/src/hooks/hook'
 import { logout } from '@/src/slices/authSlice'
 import { clearCart } from '@/src/slices/cartSlice'
 import { useState } from 'react'
-import { StarryBackground } from '@/src/components/StarryBackground'
 import { Button } from '@nextui-org/react'
 
 const tabs = [

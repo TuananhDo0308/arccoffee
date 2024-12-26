@@ -32,10 +32,15 @@ export default function SignUp() {
         return null;
     }
   };
+  const handleExit = () => {
+    dispatch(setCurrentStep(1));
+    dispatch(changeStatusSignup());
+  }
+
 
   if (status) {
     return (
-      <Popup togglePopup={() => dispatch(changeStatusSignup())}>
+      <Popup togglePopup={handleExit}>
         <div className="flex flex-col justify-center items-center w-[550px] p-5 bg-white gap-5">
           <div className="flex justify-center flex-col items-start w-full mb-5">
             <Image src={Logo} alt="app_logo" className="mb-6" />

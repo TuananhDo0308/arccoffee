@@ -105,11 +105,6 @@ const Step3 = () => {
       alert("Please fix the errors in the form before submitting.");
     }
   };
-
-
-
-  
-
   return (
     <Form className="flex flex-col w-full gap-5" onSubmit={handleSubmit}>
       <div className="flex gap-5 w-full">

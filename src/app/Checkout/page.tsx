@@ -2,13 +2,15 @@
 
 import { CartReview } from "@/src/components/Checkout/CartReview";
 import { CustomerInformation } from "@/src/components/Checkout/CustomerInformation";
-import { DiscountCode } from "@/src/components/Checkout/DiscountCode";
+import DiscountCode from "@/src/components/Checkout/DiscountCode";
 import { PaymentMethod } from "@/src/components/Checkout/PaymentMethod";
 import { PaymentSummary } from "@/src/components/Checkout/PaymentSumary";
 import { ShippingMethod } from "@/src/components/Checkout/ShippingMethod";
+import Popup from "@/src/components/PopupMessage";
 import { useAppDispatch, useAppSelector } from "@/src/hooks/hook";
 import { clearCart } from "@/src/slices/cartSlice";
 import { removeFromCartThunk, updateQuantityThunk } from "@/src/slices/cartThunk";
+import { showPopup } from "@/src/slices/message";
 import { clientLinks, httpClient } from "@/src/utils";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -50,6 +52,8 @@ export default function CheckoutPage() {
   const cartItems = useAppSelector((state) => state.cart.items);
 
   const [discountCode, setDiscountCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+
   const [shippingMethod, setShippingMethod] = useState("BE");
   const [paymentMethod, setPaymentMethod] = useState("CASH");
   const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
@@ -165,18 +169,21 @@ export default function CheckoutPage() {
   };
   const handleQuantityChange = async (id: string, delta: number) => {
       const product = cartItems.find((product) => product.productId === id);
-      const newQuantity = product.quantity + delta;
-      if (newQuantity <= 0) {
-        dispatch(removeFromCartThunk(product.productId));
-      } else {
-        dispatch(updateQuantityThunk({ productId: id, newQuantity: newQuantity }))
-          .unwrap()
-          .then(() => {
-            console.log("update quantity success");
-          })
-          .catch((error) => {});
+      if(product){
+        const newQuantity = product.quantity + delta;
+        if (newQuantity <= 0) {
+          dispatch(removeFromCartThunk(product.productId));
+        } else {
+          dispatch(updateQuantityThunk({ productId: id, newQuantity: newQuantity }))
+            .unwrap()
+            .then(() => {
+              console.log("update quantity success");
+            })
+            .catch((error) => {});
+        }
+  
       }
-
+      
       if (!product) return;
     };
 
@@ -184,7 +191,8 @@ export default function CheckoutPage() {
     const handleRemoveProduct = async (id: string) => {
       try {
         const product = cartItems.find((product) => product.productId === id);
-        dispatch(removeFromCartThunk(product.productId))
+        if(product){
+          dispatch(removeFromCartThunk(product.productId))
           .unwrap()
           .then(() => {
             console.log("Item removed from cart");
@@ -192,6 +200,8 @@ export default function CheckoutPage() {
           .catch((error) => {
             console.error("Failed to remove item from cart:", error);
           });
+        }
+        
       } catch (error) {
         console.error(error);
         alert("Remove failed!");
@@ -202,9 +212,7 @@ export default function CheckoutPage() {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-  const shipping = shippingMethod === "express" ? 30000 : 15000;
-  const discount = discountCode === "ARC10" ? subtotal * 0.1 : 0;
-  const total = subtotal + shipping - discount;
+  const total = subtotal  - discount;
 
   const validateForm = () => {
     if (!address || !region || !district || !city || !phoneNumber) {
@@ -240,10 +248,13 @@ export default function CheckoutPage() {
         console.log(response.data);
         if (response.data.res) {
           // Show success message
-          alert("Đặt hàng thành công!");
-          dispatch(clearCart());
-          // Navigate to home page
-          window.location.href = '/';
+          dispatch(showPopup({ message: "Order placed successfully!", type: "success" }));
+
+          // Wait for 2 seconds before redirecting to the homepage
+          setTimeout(() => {
+            dispatch(clearCart());
+            window.location.href = "/";
+          }, 2000); // 2000 milliseconds (2 seconds)
         }
       } catch (err) {
         console.error("Có lỗi khi đặt hàng:", err);
@@ -252,8 +263,39 @@ export default function CheckoutPage() {
     }
   };
 
+  const handleApplyDiscount = async () => {
+    try {
+      if (!discountCode) {
+        alert("Please enter a discount code");
+        return;
+      }
+  
+      const response = await httpClient.post({
+        url:clientLinks.voucher.voucherDetail,
+        data: { code: discountCode, subtotal: subtotal },
+      });
+  
+      const data = response.data;
+      if (!data.success) {
+        alert(data.message || "Invalid voucher");
+        return;
+      }
+  
+      const { percentage, maxDiscount } = data.data;
+  
+      const discountValue = Math.min((subtotal * percentage) / 100, maxDiscount);
+  
+      setDiscount(discountValue);
+      alert(`Discount applied: -${discountValue.toLocaleString()} VND`);
+    } catch (error) {
+      console.error("Error applying discount:", error);
+      alert("Failed to apply discount. Please try again.");
+    }
+  };
+  
   return (
     <div className=" min-h-screen  text-white p-4 md:p-6 max-w-7xl mx-auto">
+            <Popup/>
       <Link
         href="/"
         className="inline-flex items-center text-base font-medium text-white hover:text-zinc-500 mb-6"
@@ -268,10 +310,12 @@ export default function CheckoutPage() {
             updateQuantity={handleQuantityChange}
             removeItem={handleRemoveProduct}
           />
-          <DiscountCode
+         <DiscountCode
             discountCode={discountCode}
             setDiscountCode={setDiscountCode}
+            onApplyDiscount={handleApplyDiscount}
           />
+
           <CustomerInformation
             customerNote={customerNote}
             setCustomerNote={setCustomerNote}
@@ -305,7 +349,6 @@ export default function CheckoutPage() {
           />
           <PaymentSummary
             subtotal={subtotal}
-            shipping={shipping}
             discount={discount}
             total={total}
             onPaymentClick={handlePaymentClick}

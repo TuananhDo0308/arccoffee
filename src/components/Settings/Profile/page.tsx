@@ -12,6 +12,7 @@ import { CalendarDate } from "@internationalized/date"
 import Image from "next/image"
 import { Calendar } from '@nextui-org/react'
 import { Camera } from 'lucide-react'
+import { ProfileTabSkeleton } from '../ProfileSkeleton'
 
 interface User {
   id: string;
@@ -47,6 +48,7 @@ export function ProfileTab() {
   const [cities, setCities] = useState<City[]>([])
   const [districts, setDistricts] = useState<Location[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     fetchUserData()
@@ -54,6 +56,7 @@ export function ProfileTab() {
 
   const fetchUserData = async () => {
     try {
+      setIsLoading(true)
       const [regionsResponse, userResponse] = await Promise.all([
         httpClient.get({ url: clientLinks.user.region }),
         httpClient.get({ url: clientLinks.user.getProfile }),
@@ -82,6 +85,9 @@ export function ProfileTab() {
       }
     } catch (err) {
       console.error("Error fetching user data:", err)
+    }
+    finally{
+      setIsLoading(false)
     }
   }
 
@@ -161,7 +167,7 @@ export function ProfileTab() {
     }
   }
 
-  if (!user) return <div>Loading...</div>
+  if (isLoading) return <ProfileTabSkeleton />
 
   return (
     <div className="space-y-6">

@@ -1,6 +1,7 @@
 "use client";
 
 import SlideInNotifications from "../components/Notification";
+import Popup from "../components/PopupMessage";
 import CartDrawer from "../components/homepage/Cart/CartDrawer";
 import { Footer } from "../components/homepage/Footer";
 import { Hero } from "../components/homepage/Hero";
@@ -55,6 +56,7 @@ export default function Home() {
       <section id="shop">
         <ProductSection />
       </section>
+      <Popup/>
       <VerticalAccordion />
       <Footer />
       <SignIn />

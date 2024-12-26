@@ -3,21 +3,30 @@ import axios from 'axios';
 import { httpClient, apiLinks } from '@/src/utils';
 import { auth } from '@/auth';
 
-export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
-    const { id } = params; // Lấy id từ URL
+export const POST = async  (req: NextRequest) => {
+    const { code, subtotal } = await req.json();
 
     try {
-    const session=await auth()
-    const token =session?.user?.accessToken        
-    const response = await httpClient.get({
+        const session=await auth()
+        const token =session?.user?.accessToken        
+        const response = await httpClient.get({
             url: apiLinks.voucher.getDetailVoucher, 
-            params:{id:id},
+            params:{"code":code},
             token: token
         });
-
+        const voucher = response.data;
+        console.log(voucher)
+        if (!voucher) {
+          return NextResponse.json({ success: false, message: "Invalid voucher code" }, { status: 400 });
+        }
+    
+        if (subtotal < voucher.minOrderValue) {
+          return NextResponse.json({ success: false, message: `Order value must be at least ${voucher.minOrderValue}` }, { status:  200 });
+        }
+    
         const data = response.data;
 
-        return NextResponse.json({ data }, { status: 200 });
+        return NextResponse.json({success:true, data }, { status: 200 });
     } catch (error) {
         console.error('Error during get api:', error);
 

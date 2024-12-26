@@ -1,10 +1,11 @@
 "use client"
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   motion,
   useMotionTemplate,
   useMotionValue,
   useSpring,
+  AnimatePresence,
 } from "framer-motion";
 import { useAppDispatch } from "@/src/hooks/hook";
 import { addNotification } from "@/src/slices/UIcomponentSlice/NotificationSlice";
@@ -12,6 +13,7 @@ import { clientLinks, httpClient } from "@/src/utils";
 import { useSession } from "next-auth/react";
 import { addToCartThunk } from "@/src/slices/cartThunk";
 import Image from "next/image";
+import ProductDetailPopup from "./ProductDetail";
 
 const ROTATION_RANGE = 32.5;
 const HALF_ROTATION_RANGE = 32.5 / 2;
@@ -19,11 +21,10 @@ const HALF_ROTATION_RANGE = 32.5 / 2;
 export const ProductCard = ({ product }: any) => {
   const ref = useRef(null);
   const dispatch = useAppDispatch()
-
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   
   const handleAddToCart = () => {
     const id = Date.now();
- 
     dispatch(addToCartThunk(product))
     .unwrap()
     .then(() => {
@@ -73,58 +74,89 @@ export const ProductCard = ({ product }: any) => {
     x.set(0);
     y.set(0);
   };
+  const [isHovered, setIsHovered] = useState(false)
 
   return (
-    <div
-     
-      className="relative flex items-center justify-center w-full h-[370px] rounded-3xl bg-white/30"
-    >
+    <>
       <div
-        style={{
-          transform: "translateZ(50px)",
-          transformStyle: "preserve-3d",
-        }}
-        className="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-start"
+        className="relative flex items-center justify-center w-full h-[370px] rounded-3xl bg-white/30 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:bg-white/40 group cursor-pointer"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={() => setIsPopupOpen(true)}
       >
         <div
-          className="w-full h-[240px] border border-black rounded-t-xl overflow-hidden"
+          className="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-start transition-transform duration-300 ease-out transform-style-3d"
           style={{
-            transform: "translateZ(20px)",
+            transform: isHovered ? 'translateZ(50px) rotateX(5deg) rotateY(-5deg)' : 'translateZ(0)',
           }}
         >
-          <Image src={product.image} layout="fill" alt={product.name} quality={10} loading="lazy" className="object-cover" />
-        </div>
-
-        <h3
-          className="font-bold mt-2 text-xl text-black truncate"
-          style={{
-            transform: "translateZ(20px)",
-          }}
-        >
-          {product.name}
-        </h3>
-        <p className="text-xs text-gray-500" style={{
-          transform: "translateZ(15px)",
-        }}>Stock: {product.stock}</p>
-        <div className="flex justify-between items-center mt-auto" style={{
-          transform: "translateZ(20px)",
-        }}>
-          <p className="text-yellow-500 font-extrabold text-2xl">
-            {product.price}
-          </p>
-
-          <button 
-            className="bg-black border border-black text-white py-2 px-4 rounded-full hover:bg-transparent hover:text-black transition-colors duration-300"
+          <div
+            className="w-full h-[240px] border border-black rounded-t-xl overflow-hidden transition-transform duration-300 ease-out"
             style={{
-              transform: "translateZ(30px)",
+              transform: isHovered ? 'translateZ(30px)' : 'translateZ(20px)',
             }}
-            onClick={handleAddToCart}
           >
-            Add +
-          </button>
+            <Image 
+              src={product.image} 
+              layout="fill" 
+              alt={product.name} 
+              quality={10} 
+              loading="lazy" 
+              className="object-cover transition-transform duration-300 ease-out group-hover:scale-110"
+            />
+          </div>
+
+          <h3
+            className="font-bold mt-2 text-xl text-black truncate transition-transform duration-300 ease-out"
+            style={{
+              transform: isHovered ? 'translateZ(40px)' : 'translateZ(20px)',
+            }}
+          >
+            {product.name}
+          </h3>
+          <p 
+            className="text-xs text-gray-500 transition-transform duration-300 ease-out"
+            style={{
+              transform: isHovered ? 'translateZ(35px)' : 'translateZ(15px)',
+            }}
+          >
+            Stock: {product.stock}
+          </p>
+          <div 
+            className="flex justify-between items-center mt-auto transition-transform duration-300 ease-out"
+            style={{
+              transform: isHovered ? 'translateZ(40px)' : 'translateZ(20px)',
+            }}
+          >
+            <p className="text-yellow-500 font-extrabold text-2xl">
+              {product.price}
+            </p>
+
+            <button 
+              className="bg-black border border-black text-white py-2 px-4 rounded-full transition-all duration-300 ease-out hover:bg-transparent hover:text-black"
+              style={{
+                transform: isHovered ? 'translateZ(50px)' : 'translateZ(30px)',
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddToCart();
+              }}
+            >
+              Add +
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+      <AnimatePresence>
+        {isPopupOpen && (
+          <ProductDetailPopup
+            product={product}
+            onClose={() => setIsPopupOpen(false)}
+            onAddToCart={handleAddToCart}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

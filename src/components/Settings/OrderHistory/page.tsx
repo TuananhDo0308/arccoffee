@@ -1,48 +1,77 @@
-  'use client'
+
+
+
+'use client'
 
 import { useEffect, useState } from "react"
 import { clientLinks, httpClient } from "@/src/utils"
 import Image from "next/image"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Clock } from 'lucide-react'
+import { OrderTrackingTabSkeleton } from "../OrderSkeleton"
 
-// Interfaces for order and order items (replace with your actual interfaces)
-interface Order {
-  id: string;
-  status: string;
-  estimatedDelivery: string;
-  trackingNumber?: string;
-  totalPrice: number;
-  items: OrderItem[];
-}
-
+// Enhanced interfaces to match API response
 interface OrderItem {
-  id: string;
-  name: string;
-  image: string;
-  quantity: number;
-  price: number;
+  productId: string
+  name: string
+  price: number
+  image:string
+  quantity?: number
 }
 
+interface Order {
+  id: string
+  customerId: string
+  items: OrderItem[]
+  orderDate: string
+  paymentId: string
+  shippingMethodId: string
+  status: string
+  totalPrice: number
+  voucherId: string | null
+}
 
 export function OrderHistoryTab() {
   const [orders, setOrders] = useState<Order[]>([])
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchOrders = async () => {
+      setIsLoading(true)
       try {
-        const response = await httpClient.get({url:clientLinks.bill.completedBills});
-        setOrders(response.data.data);
+        const response = await httpClient.get({url: clientLinks.bill.completedBills})
+        setOrders(response.data.data)
       } catch (error) {
-        console.error("Error fetching orders:", error);
-        // Handle error appropriately (e.g., display an error message)
+        console.log("Error fetching orders:", error)
+      } finally {
+        setIsLoading(false)
       }
-    };
+    }
 
-    fetchOrders();
-  }, []);
+    fetchOrders()
+  }, [])
+
+  if (isLoading) return <OrderTrackingTabSkeleton />
+
+  if (!isLoading && orders.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-white text-xl">You don't have any orders yet.</p>
+      </div>
+    )
+  }
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  }
 
   return (
     <div className="space-y-4">
@@ -52,15 +81,31 @@ export function OrderHistoryTab() {
           className="bg-black/50 backdrop-blur-md border-white/10"
         >
           <div className="p-6">
-            <div className="flex justify-between items-center">
-              <div>
+            <div className="flex justify-between items-start">
+              <div className="space-y-2">
                 <p className="text-lg font-semibold text-white">Order #{order.id}</p>
-                <p className="text-sm text-white/60">Status: {order.status}</p>
+                <div className="space-y-1">
+                  <p className="text-sm text-white/60">
+                    <Clock className="inline-block w-4 h-4 mr-1" />
+                    Ordered: {formatDate(order.orderDate)}
+                  </p>
+                  <p className="text-sm text-white/60">Status: {order.status}</p>
+                  <p className="text-sm text-white/60">Payment ID: {order.paymentId}</p>
+                  <p className="text-sm text-white/60">Shipping Method: {order.shippingMethodId}</p>
+                  {order.voucherId && (
+                    <p className="text-sm text-white/60">Voucher Applied: {order.voucherId}</p>
+                  )}
+                </div>
               </div>
               <div className="flex items-center gap-4">
-                <p className="text-lg font-semibold text-[#F5A524]">
-                  {order.totalPrice.toLocaleString()} VND
-                </p>
+                <div className="text-right">
+                  <p className="text-lg font-semibold text-[#F5A524]">
+                    {order.totalPrice.toLocaleString()} VND
+                  </p>
+                  <p className="text-sm text-white/60">
+                    {order.items.length} item{order.items.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -85,11 +130,14 @@ export function OrderHistoryTab() {
                       alt={item.name}
                       width={48}
                       height={48}
+                      quality={10}
                       className="rounded-lg object-cover"
                     />
                     <div className="flex-grow">
                       <p className="font-medium text-white">{item.name}</p>
-                      <p className="text-sm text-white/60">Quantity: {item.quantity}</p>
+                      <p className="text-sm text-white/60">
+                        Quantity: {item.quantity || 1}
+                      </p>
                     </div>
                     <p className="font-medium text-[#F5A524]">
                       {item.price.toLocaleString()} VND

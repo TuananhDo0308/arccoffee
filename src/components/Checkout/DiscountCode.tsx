@@ -4,9 +4,12 @@ import { Card, CardBody, CardHeader, Button } from "@nextui-org/react";
 interface DiscountCodeProps {
   discountCode: string;
   setDiscountCode: (code: string) => void;
+  onApplyDiscount: () => void;
+
 }
 
-export function DiscountCode({ discountCode, setDiscountCode }: DiscountCodeProps) {
+const DiscountCode = ({ discountCode, setDiscountCode, onApplyDiscount }:DiscountCodeProps) => {
+  
   return (
     <Card className="bg-zinc-900 border-zinc-800 shadow-xl text-white hover:shadow-zinc-800/30 p-2  transition-shadow">
       <CardHeader className="border-b border-zinc-800">
@@ -21,6 +24,7 @@ export function DiscountCode({ discountCode, setDiscountCode }: DiscountCodeProp
             className="bg-zinc-800 border-zinc-700 focus:border-zinc-600"
           />
           <Button
+            onPress={onApplyDiscount}
             className="bg-zinc-800 hover:bg-zinc-700 text-white"
           >
             Apply
@@ -36,3 +40,4 @@ export function DiscountCode({ discountCode, setDiscountCode }: DiscountCodeProp
   );
 }
 
+export default DiscountCode;

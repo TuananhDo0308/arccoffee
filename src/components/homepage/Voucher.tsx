@@ -7,11 +7,13 @@ import { clientLinks, httpClient } from "@/src/utils";
 const VerticalAccordion = () => {
   const [vouchers, setVouchers] = useState<any[]>([]);
   const [open, setOpen] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch data from backend
     const fetchVouchers = async () => {
       try {
+        setLoading(true);
         const response = await httpClient.get({
           url: clientLinks.voucher.voucher,
         }); // Thay bằng URL API của bạn
@@ -20,10 +22,17 @@ const VerticalAccordion = () => {
       } catch (error) {
         console.error("Error fetching vouchers:", error);
       }
+      finally {
+        setLoading(false);
+      }
     };
 
     fetchVouchers();
   }, []);
+
+  if (loading) {
+    return <VoucherSkeleton />;
+  }
 
   return (
     <div className="py-5 items-center flex justify-center">
@@ -149,4 +158,24 @@ const descriptionVariants = {
     },
   },
   closed: { opacity: 0, y: "100%" },
+};
+
+
+const VoucherSkeleton = () => {
+  return (
+    <div className="py-5 items-center flex justify-center animate-pulse">
+      <div className="container flex items-center justify-between">
+        <div className="container text-white">
+          <div className="h-12 w-1/3 bg-gray-300 rounded mb-20"></div>
+          <div className="mb-9 flex items-center justify-between border-b border-zinc-800 px-3 pb-9">
+            <div className="flex flex-col lg:flex-row h-fit lg:h-[450px] w-full max-w-6xl mx-auto shadow overflow-hidden">
+              {[...Array(4)].map((_, index) => (
+                <div key={index} className="bg-gray-300 h-full w-full lg:w-1/4"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };

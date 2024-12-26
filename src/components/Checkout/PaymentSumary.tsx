@@ -4,13 +4,12 @@ import { Separator } from "@/components/ui/separator";
 
 interface PaymentSummaryProps {
   subtotal: number;
-  shipping: number;
   discount: number;
   total: number;
   onPaymentClick: () => void;
 }
 
-export function PaymentSummary({ subtotal, shipping, discount, total, onPaymentClick }: PaymentSummaryProps) {
+export function PaymentSummary({ subtotal, discount, total, onPaymentClick }: PaymentSummaryProps) {
   return (
     <Card className="bg-zinc-900 border-zinc-800 shadow-lg hover:shadow-zinc-800/30 transition-shadow">
       <CardHeader className="border-b border-zinc-800">
@@ -21,10 +20,7 @@ export function PaymentSummary({ subtotal, shipping, discount, total, onPaymentC
           <span>Tạm tính</span>
           <span>{subtotal.toLocaleString()}đ</span>
         </div>
-        <div className="flex justify-between">
-          <span>Shipping fee</span>
-          <span>{shipping.toLocaleString()}đ</span>
-        </div>
+    
         {discount > 0 && (
           <div className="flex justify-between text-green-500">
             <span>Discount</span>

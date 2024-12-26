@@ -35,7 +35,7 @@ const clientLinks = {
 
   voucher: {
     voucher: `${clientUrl}/api/user/cart/vouchers`,
-    voucherDetail: `${clientUrl}/api/user/bills/vouchers/detail`,
+    voucherDetail: `${clientUrl}/api/user/cart/vouchers/detail`,
   },
 };
 

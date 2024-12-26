@@ -5,7 +5,7 @@ const apiKey = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 
 const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-pro", 
+  model: "gemini-1.5-pro",
 });
 
 const generationConfig = {
@@ -16,12 +16,21 @@ const generationConfig = {
   responseMimeType: "text/plain",
 };
 
-export async function POST(req) {
+// Định nghĩa kiểu dữ liệu Product
+interface Product {
+  name: string;
+  price: number;
+  description: string;
+}
+
+export async function POST(req: Request) {
   try {
-    const { userQuery, products } = await req.json(); 
+    const { userQuery, products }: { userQuery: string; products: Product[] } = await req.json();
 
     // Tạo prompt cung cấp dữ liệu sản phẩm cho mô hình
-    const productDetails = products.map(product => `${product.name}: ${product.price} VND - ${product.description}`).join("\n");
+    const productDetails = products
+      .map(product => `${product.name}: ${product.price} VND - ${product.description}`)
+      .join("\n");
 
     const prompt = `
       Dưới đây là các sản phẩm và giá của cửa hàng:
@@ -37,7 +46,7 @@ export async function POST(req) {
       history: [
         {
           role: "user",
-          parts: [{ text: prompt }],  
+          parts: [{ text: prompt }],
         },
         {
           role: "model",
@@ -53,18 +62,21 @@ export async function POST(req) {
     const filteredProducts = products.filter(product => {
       return responseText.toLowerCase().includes(product.name.toLowerCase());
     });
-    const response = responseText.split(":")[0];  
+    const response = responseText.split(":")[0];
 
     return NextResponse.json({
       response: response,
-      menu: filteredProducts,  
+      menu: filteredProducts,
     });
 
   } catch (error) {
     console.error("Error:", error);
 
-    return NextResponse.json({
-      error: error.message || "Có lỗi trong quá trình xử lý yêu cầu.",
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: error || "Có lỗi trong quá trình xử lý yêu cầu.",
+      },
+      { status: 500 }
+    );
   }
 }

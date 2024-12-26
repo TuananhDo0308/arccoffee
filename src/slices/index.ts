@@ -6,7 +6,7 @@ import noti from './UIcomponentSlice/NotificationSlice'
 import signupData from './cartSlice'
 import tabFilter from './tabFilterSlice'
 import cart from './signUpFormdata'
-
+import message from './message'
 import filteredproducts from './filteredProductsSlice'
 export default {
   auth,
@@ -17,5 +17,6 @@ export default {
   signup,
   signupData,
   noti,
-  tabFilter
+  tabFilter,
+  message
 };

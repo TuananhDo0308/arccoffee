@@ -14,7 +14,7 @@ import signUpDataReducer from '../slices/signUpFormdata'
 import cartReducer from '../slices/cartSlice'
 import auth from '../slices/authSlice'
 import tabFilter from '../slices/tabFilterSlice'
-
+import messageReducer from '../slices/message'
 
 import { sign } from 'crypto';
 
@@ -34,6 +34,7 @@ const rootReducer = combineReducers({
   signupData:signUpDataReducer,
   notification:notiReducer,
   tabFilter:tabFilter,
+  message:messageReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
