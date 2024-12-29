@@ -73,8 +73,8 @@ Ensure you have the following installed on your system:
 1. Clone the repository to your local machine:
 
    ```bash
-   git clone <repository_url>
-   cd <project_directory>
+   git clone https://github.com/TuananhDo0308/arccoffee.git
+   cd arccoffee.git
    ```
 
 2. Install the dependencies:
