@@ -37,6 +37,14 @@ const clientLinks = {
     voucher: `${clientUrl}/api/user/cart/vouchers`,
     voucherDetail: `${clientUrl}/api/user/cart/vouchers/detail`,
   },
+
+  email:{
+    resetPassword:`${clientUrl}/api/email/resetpassword`,
+    updatePassword:`${clientUrl}/api/email/reset-update`,
+    googleSignin:`${clientUrl}/api/email/googleSignin`,
+    registerGoogle:`${clientUrl}/api/email/googleSignup`,
+
+  }
 };
 
 export default clientLinks;

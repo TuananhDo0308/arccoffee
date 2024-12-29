@@ -97,25 +97,24 @@ export default function CheckoutPage() {
         const response = await httpClient.get({
           url: clientLinks.user.getProfile,
         });
-  
-        if (response.data && response.data.data) {
-          setCity(response.data.data.cityId);
-          setDistrict(response.data.data.districtId);
-          setRegion(response.data.data.regionId);
-          setAddress(response.data.data.street);
-          setPhoneNumber(response.data.data.phoneNumber);
+        if (response.data && response.data.data.data) {
+          setCity(response.data.data.data.cityId);
+          setDistrict(response.data.data.data.districtId);
+          setRegion(response.data.data.data.regionId);
+          setAddress(response.data.data.data.street);
+          setPhoneNumber(response.data.data.data.phoneNumber);
         }
   
         if (res.data && res.data.data) {
           setRegions(res.data.data);
           const userRegion = res.data.data.find(
-            (region: any) => region.id === response.data.data.regionId
+            (region: any) => region.id === response.data.data.data.regionId
           );
   
           setCities(userRegion?.cities || []);
   
           const userCity = userRegion?.cities?.find(
-            (city: any) => city.id === response.data.data.cityId
+            (city: any) => city.id === response.data.data.data.cityId
           );
   
           setDistricts(userCity?.districts || []);
@@ -266,7 +265,12 @@ export default function CheckoutPage() {
   const handleApplyDiscount = async () => {
     try {
       if (!discountCode) {
-        alert("Please enter a discount code");
+        dispatch(
+          showPopup({
+            message: "Please enter a discount code",
+            type: "error",
+          })
+        )
         return;
       }
   
@@ -277,7 +281,12 @@ export default function CheckoutPage() {
   
       const data = response.data;
       if (!data.success) {
-        alert(data.message || "Invalid voucher");
+        dispatch(
+          showPopup({
+            message: "Invalid voucher.",
+            type: "error",
+          })
+        )
         return;
       }
   
@@ -286,16 +295,26 @@ export default function CheckoutPage() {
       const discountValue = Math.min((subtotal * percentage) / 100, maxDiscount);
   
       setDiscount(discountValue);
-      alert(`Discount applied: -${discountValue.toLocaleString()} VND`);
+      dispatch(
+        showPopup({
+          message: `Discount applied: -${discountValue.toLocaleString()} VND`,
+          type: "success",
+        })
+      )
     } catch (error) {
       console.error("Error applying discount:", error);
-      alert("Failed to apply discount. Please try again.");
+      dispatch(
+        showPopup({
+          message: "Failed to apply discount. Please try again.",
+          type: "error",
+        })
+      )
     }
   };
   
   return (
     <div className=" min-h-screen  text-white p-4 md:p-6 max-w-7xl mx-auto">
-            <Popup/>
+      <Popup/>
       <Link
         href="/"
         className="inline-flex items-center text-base font-medium text-white hover:text-zinc-500 mb-6"

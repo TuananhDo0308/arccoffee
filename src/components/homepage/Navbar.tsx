@@ -64,10 +64,14 @@ export default function Navbar() {
       <div className="py-4 px-4 md:px-6 lg:px-8">
         <div className="container mx-auto flex items-center justify-between">
           {/* Logo */}
-          <Link href="/">
-            <Image src={Logo} alt="app_logo" className="h-7 w-11" />
-          </Link>
-
+          <div className="relative w-12 h-8">
+            <Image
+              src={Logo}
+              alt="User Avatar"
+              layout="fill"
+              quality={100}
+            />
+          </div>
           {/* Desktop Navbar */}
           <nav className="hidden md:flex gap-6 text-white items-center">
             <NavItems />

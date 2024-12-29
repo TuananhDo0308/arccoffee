@@ -42,7 +42,7 @@ export function OrderHistoryTab() {
       setIsLoading(true)
       try {
         const response = await httpClient.get({url: clientLinks.bill.completedBills})
-        setOrders(response.data.data)
+        setOrders(response.data.data.data)
       } catch (error) {
         console.log("Error fetching orders:", error)
       } finally {

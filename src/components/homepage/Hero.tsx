@@ -53,7 +53,7 @@ const CenterImage = () => {
       </motion.div>
 
       <div className="absolute inset-x-0 bottom-10 sm:bottom-20 md:bottom-36 flex justify-center px-4">
-        <h1 className="text-white text-4xl sm:text-6xl md:text-8xl lg:text-[200px] font-bold hover:text-yellow-500 transition-all text-center">Arc Coffee</h1>
+        <h1 className="text-white text-4xl sm:text-6xl md:text-8xl lg:text-[200px] cursor-pointer font-bold hover:text-yellow-500 transition-all text-center">Arc Coffee</h1>
       </div>
     </div>
   );

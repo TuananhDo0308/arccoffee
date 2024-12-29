@@ -7,6 +7,7 @@ const apiLinks = {
     updateProfile:`${authUrl}/api/authentication/profile`,
     getProfile:`${authUrl}/api/authentication/profile`,
     region: `${authUrl}/api/regions`,
+    getmail: `${authUrl}/api/authentication/email`
   },
 
   homepage: {
@@ -44,6 +45,12 @@ const apiLinks = {
     getVouchers: `${authUrl}/api/vouchers/public`,
     getDetailVoucher: `${authUrl}/api/vouchers/detail`,
   },
+
+  authen:{
+    updatePassword: `${authUrl}/api/authentication/new-password`,
+    googlesignin: `${authUrl}/api/authentication/login-google`,
+    registerGoogle:`${authUrl}/api/authentication/signup-google`,
+  }
 };
 
 export default apiLinks;

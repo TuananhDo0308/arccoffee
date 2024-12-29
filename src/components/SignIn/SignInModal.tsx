@@ -16,6 +16,8 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false); // State for loading spinner
+  const [loadingGoogle, setLoadingGoogle] = useState(false); // State cho loading của Google
+  const [loadingForgotPassword, setLoadingForgotPassword] = useState(false);
 
   const dispatch = useAppDispatch();
   const status = useAppSelector((state) => state.signin.value);
@@ -38,26 +40,22 @@ export default function SignIn() {
         password,
         redirect: false, // Disable redirect to handle errors manually
       });
-  
       console.log("Sign-in Result:", result);
-  
       if (result?.ok) {
         // Lấy session sau khi đăng nhập
         const session = await getSession(); // Get session with token
-  
+
         console.log("Session after login:", session);
-  
+
         if (session?.user?.accessToken) {
           // Fetch the cart and show success message
-          await fetchCart();
           dispatch(
             showPopup({
               message: "Login successfully",
               type: "success",
             })
           );
-          dispatch(login());
-          close(); // Close the popup
+          close()
         } else {
           dispatch(
             showPopup({
@@ -86,7 +84,6 @@ export default function SignIn() {
       setLoading(false); // Stop loading
     }
   };
-  
 
   const data = useAppSelector((state) => state.cart.items);
   const items = data.map((item) => ({
@@ -119,14 +116,49 @@ export default function SignIn() {
     }
   };
 
-  const handleLoginGoogle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    signIn("google");
-    close();
-  };
 
+  const handleLoginGoogle = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    setLoadingGoogle(true); // Bắt đầu loading
+    const result = signIn("google", { redirect: false });
+  };
+  
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+  };
+
+  const handleForgotPassword = async () => {
+    setLoadingForgotPassword(true);
+    try {
+      const response = await fetch('/api/email/resetpassword', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+    
+      if (response.ok) {
+        dispatch(
+          showPopup({
+            message: "Reset password link sent to your email",
+            type: "success",
+          })
+        );
+      } else {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to send reset link");
+      }
+    } catch (error) {
+      console.error("Error sending reset password link:", error);
+      dispatch(
+        showPopup({
+          message: "Failed to send reset password link. Please try again.",
+          type: "error",
+        })
+      );
+    } finally {
+      setLoadingForgotPassword(false);
+    }
   };
 
   if (status) {
@@ -173,9 +205,17 @@ export default function SignIn() {
 
             {/* Remember me và Forgot password */}
             <div className="flex justify-between w-full flex-row-reverse">
-              <a href="#" className="text-sm text-yellow-500 hover:underline">
-                Forgot password?
-              </a>
+              <button
+                onClick={handleForgotPassword}
+                disabled={loadingForgotPassword}
+                className="text-sm text-yellow-500 hover:underline"
+              >
+                {loadingForgotPassword ? (
+                  <div className="w-4 h-4 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  "Forgot password?"
+                )}
+              </button>
             </div>
 
             {/* Nút Sign In */}
@@ -192,35 +232,41 @@ export default function SignIn() {
               )}
             </button>
 
-            {/* Hoặc đăng nhập bằng Google */}
             <button
               type="button"
               onClick={handleLoginGoogle}
               className="w-full py-3 border border-gray-300 rounded-lg text-sm text-gray-700 flex justify-center items-center gap-2 hover:bg-gray-100"
+              disabled={loadingGoogle} // Disable button khi loading
             >
-              <svg
-                className="w-5 h-5"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 48 48"
-              >
-                <path
-                  fill="#EA4335"
-                  d="M24 9.5c3.4 0 6.5 1.3 8.9 3.4l6.6-6.6C35.6 3 30.1 1 24 1 14.7 1 7 6.9 3.6 15.1l7.9 6.2C13.2 14.3 18.2 9.5 24 9.5z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M46.5 24.5c0-1.4-.1-2.8-.4-4.1H24v8.3h12.8c-.5 2.6-2 4.8-4.2 6.3l7.9 6.2c4.6-4.3 7-10.5 7-16.7z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M10.8 28.7c-.6-2.6-.6-5.4 0-8L2.9 14.4C-.9 20.3-.9 28.7 2.9 34.6l7.9-6z"
-                />
-                <path
-                  fill="#4285F4"
-                  d="M24 46c6.5 0 12-2.1 16.4-5.7l-7.9-6.2c-2.3 1.5-5.3 2.4-8.5 2.4-5.8 0-10.8-3.9-12.7-9.2l-7.9 6.2C7.1 41.1 15.1 46 24 46z"
-                />
-              </svg>
-              Sign in with Google
+              {loadingGoogle ? (
+                <div className="w-5 h-5 border-2 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <>
+                  <svg
+                    className="w-5 h-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 48 48"
+                  >
+                    <path
+                      fill="#EA4335"
+                      d="M24 9.5c3.4 0 6.5 1.3 8.9 3.4l6.6-6.6C35.6 3 30.1 1 24 1 14.7 1 7 6.9 3.6 15.1l7.9 6.2C13.2 14.3 18.2 9.5 24 9.5z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M46.5 24.5c0-1.4-.1-2.8-.4-4.1H24v8.3h12.8c-.5 2.6-2 4.8-4.2 6.3l7.9 6.2c4.6-4.3 7-10.5 7-16.7z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M10.8 28.7c-.6-2.6-.6-5.4 0-8L2.9 14.4C-.9 20.3-.9 28.7 2.9 34.6l7.9-6z"
+                    />
+                    <path
+                      fill="#4285F4"
+                      d="M24 46c6.5 0 12-2.1 16.4-5.7l-7.9-6.2c-2.3 1.5-5.3 2.4-8.5 2.4-5.8 0-10.8-3.9-12.7-9.2l-7.9 6.2C7.1 41.1 15.1 46 24 46z"
+                    />
+                  </svg>
+                  Sign in with Google
+                </>
+              )}
             </button>
 
             {/* Link Sign Up */}
@@ -241,3 +287,4 @@ export default function SignIn() {
 
   return null;
 }
+

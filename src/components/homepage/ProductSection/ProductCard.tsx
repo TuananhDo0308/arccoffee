@@ -1,5 +1,5 @@
 "use client"
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   motion,
   useMotionTemplate,
@@ -23,6 +23,24 @@ export const ProductCard = ({ product }: any) => {
   const dispatch = useAppDispatch()
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   
+  const handleProductClick = useCallback(async () => {
+    setIsPopupOpen(true);
+    try {
+      // Make the API call
+      const response = await httpClient.get({
+        url: `${clientLinks.homepage.detailProduct}/${product.id}`,
+      });
+      // Handle the API response if needed
+      if (response.data) {
+        // Update product details or perform any other actions
+        console.log("Product details fetched:", response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching product details:", error);
+      // Optionally, you can show an error notification here
+    }
+  }, [product.id]);
+
   const handleAddToCart = () => {
     const id = Date.now();
     dispatch(addToCartThunk(product))
@@ -82,7 +100,7 @@ export const ProductCard = ({ product }: any) => {
         className="relative flex items-center justify-center w-full h-[370px] rounded-3xl bg-white/30 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:bg-white/40 group cursor-pointer"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={() => setIsPopupOpen(true)}
+        onClick={handleProductClick}
       >
         <div
           className="w-full h-full bg-white rounded-2xl p-5 flex flex-col justify-start transition-transform duration-300 ease-out transform-style-3d"
@@ -129,7 +147,7 @@ export const ProductCard = ({ product }: any) => {
             }}
           >
             <p className="text-yellow-500 font-extrabold text-2xl">
-              {product.price}
+              {product.price.toLocaleString()} 
             </p>
 
             <button 

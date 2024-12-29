@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 
@@ -18,27 +18,55 @@ const PaymentPage = () => {
       setResult(data);
     } catch (error) {
       console.error("Payment error:", error);
+      alert("Có lỗi xảy ra trong quá trình thanh toán.");
     }
   };
 
   return (
-    <div className="w-full h-full bg-white">
-      <h1>ZaloPay Payment Sandbox</h1>
-      <input
-        type="number"
-        placeholder="Amount (VND)"
-        value={amount}
-        onChange={(e) => setAmount(Number(e.target.value))}
-      />
-      <input
-        type="text"
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <button onClick={handlePayment}>Pay</button>
+    <div className="w-full h-full bg-white p-4">
+      <h1 className="text-2xl font-bold mb-4">ZaloPay Payment Sandbox</h1>
 
-      {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
+      {/* Input Amount */}
+      <div className="mb-4">
+        <label className="block text-lg font-medium mb-2">Amount (VND):</label>
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value))}
+          className="w-full p-2 border border-gray-300 rounded-md"
+          placeholder="Nhập số tiền"
+        />
+      </div>
+
+      {/* Input Description */}
+      <div className="mb-4">
+        <label className="block text-lg font-medium mb-2">Description:</label>
+        <input
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded-md"
+          placeholder="Nhập mô tả"
+        />
+      </div>
+
+      {/* Submit Button */}
+      <button
+        onClick={handlePayment}
+        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+      >
+        Process Payment
+      </button>
+
+      {/* Display Result */}
+      {result && (
+        <div className="mt-6 bg-gray-100 p-4 rounded-md">
+          <h3 className="text-lg font-bold mb-2">Payment Response:</h3>
+          <pre className="bg-gray-200 p-4 rounded-md text-sm">
+            {JSON.stringify(result, null, 2)}
+          </pre>
+        </div>
+      )}
     </div>
   );
 };

@@ -42,7 +42,7 @@ export function OrderTrackingTab() {
       setIsLoading(true)
       try {
         const response = await httpClient.get({url: clientLinks.bill.pendingBills})
-        setOrders(response.data.data)
+        setOrders(response.data.data.data)
       } catch (error) {
         console.log("Error fetching orders:", error)
       } finally {

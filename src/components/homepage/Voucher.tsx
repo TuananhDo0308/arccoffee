@@ -62,6 +62,8 @@ const VerticalAccordion = () => {
                   title={voucher.code}
                   imgSrc="/default-image.jpg" // Thay bằng hình ảnh mặc định nếu không có
                   description={voucher.description}
+                  minValue={voucher.minOrderValue.toLocaleString()}
+                  maxDiscount={voucher.maxDiscount.toLocaleString()}
                 />
               ))}
             </div>
@@ -72,7 +74,7 @@ const VerticalAccordion = () => {
   );
 };
 
-const Panel = ({ open, setOpen, id, title, imgSrc, description }: any) => {
+const Panel = ({ open, setOpen, id, title, imgSrc, description,minValue, maxDiscount }: any) => {
   const { width } = useWindowSize();
   const isOpen = open === id;
 
@@ -117,6 +119,9 @@ const Panel = ({ open, setOpen, id, title, imgSrc, description }: any) => {
             >
               <p>{description}</p>
               <p>Code: {title}</p>
+              <p>Min order value: {minValue} VND</p>
+              <p>Max discount: {maxDiscount} VND </p>
+
             </motion.div>
           </motion.div>
         )}

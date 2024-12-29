@@ -17,7 +17,7 @@ const Popup: React.FC = () => {
       if (isOpen) {
         const timer = setTimeout(() => {
           dispatch(hidePopup());
-        }, 5000); // 5 seconds
+        }, 3000); // 5 seconds
   
         return () => clearTimeout(timer); // Clear timeout on component unmount or state change
       }

@@ -62,7 +62,7 @@ export function ProfileTab() {
         httpClient.get({ url: clientLinks.user.getProfile }),
       ])
 
-      const userData = userResponse.data.data
+      const userData = userResponse.data.data.data
       setUser({
         ...userData,
         birthDate: userData.birthDate ? new CalendarDate(userData.birthDate.year, userData.birthDate.month, userData.birthDate.day) : null,
@@ -204,35 +204,7 @@ export function ProfileTab() {
         />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Email and Password</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label className="text-white">Email</Label>
-              <Input
-                value={user?.email}
-                disabled={true}
-                className="bg-black/50 border-white/20 text-white"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-white">Password</Label>
-              <Input
-                type="password"
-                value="********"
-                disabled={true}
-                className="bg-black/50 border-white/20 text-white"
-              />
-            </div>
-            <Button className="bg-[#F5A524] text-black hover:bg-[#F5A524]/90">
-              Change Password
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+
 
       <Card>
         <CardHeader>

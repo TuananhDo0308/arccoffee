@@ -1,9 +1,9 @@
-import crypto from "crypto";
+import { createHmac } from "crypto";
 
-export const createHmac = (key:any, data:any) => {
-  return crypto.createHmac("sha256", key).update(data).digest("hex");
+export const createHmacSignature = (key: string, data: string) => {
+  return createHmac("sha256", key).update(data).digest("hex");
 };
 
 export const getCurrentTimestamp = () => {
-  return Date.now();
+  return new Date().getTime();
 };
