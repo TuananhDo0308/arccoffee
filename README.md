@@ -168,12 +168,16 @@ Once the project is running, users can:
 
 The project uses the following technologies:
 
+The project uses the following technologies:
+
 - **Next.js:** React framework for building performant web applications.
-- **React:** Frontend JavaScript library for building user interfaces.
+- **NextAuth.js:** Authentication and session management.
+- **Redux Toolkit:** State management for predictable application state.
+- **Framer Motion:** Animation library for smooth transitions and effects.
 - **Tailwind CSS:** Utility-first CSS framework for responsive design.
 - **Redis:** Session management and caching.
-- **Stripe API:** Payment gateway integration.
-- **NextAuth.js:** Authentication and session management.
+- **Axios:** For making HTTP requests.
+
 
 ---
 
