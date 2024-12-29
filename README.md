@@ -4,6 +4,27 @@
 
 This is an eCommerce website built with **Next.js**, providing a seamless and responsive shopping experience. The website includes features such as product display, shopping cart, user authentication, order management, and payment processing.
 
+---
+
+## Preview
+
+### 1. Website UI
+![Homepage Preview](./public/images/home.png)
+
+### 2. Key Features
+#### Product section
+![Product Page Preview](./public/images/product.png)
+
+#### Shopping Cart
+![Shopping Cart Preview](./public/images/cart.png)
+
+### 3. Gemini Chatbot
+![AI chatbot 1 UI Preview](./public/images/Ai1.png)
+![AI chatbot 2 UI Preview](./public/images/Ai2.png)
+
+
+---
+
 ### Features
 
 - **Product Pages:** Display products with details, images, and pricing.
@@ -17,30 +38,37 @@ This is an eCommerce website built with **Next.js**, providing a seamless and re
 ## Table of Contents
 
 - [Getting Started](#getting-started)
+- [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Run the Project](#run-the-project)
 - [Usage](#usage)
 - [Tech Stack](#tech-stack)
-- [Folder Structure](#folder-structure)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
 - [License](#license)
 
 ---
 
 ## Getting Started
 
-To set up the project locally, you will need to have **Node.js** and **npm** (or **yarn**) installed on your machine. Follow the instructions below to get started.
+Follow these steps to set up the project locally.
 
-### Prerequisites
+---
+
+## Prerequisites
 
 Ensure you have the following installed on your system:
 
-- Node.js (v16+ recommended)
-- npm (or yarn)
+- **Node.js:** Version 16 or higher.
+- **npm** or **yarn** for package management.
+- **Redis:** For session management (via `ioredis`).
+   - To install locally:
+     - **Linux:** `sudo apt install redis`
+     - **MacOS:** `brew install redis`
+     - **Windows:** Use Docker or WSL for Redis.
 
-### Installation
+---
+
+## Installation
 
 1. Clone the repository to your local machine:
 
@@ -57,39 +85,70 @@ Ensure you have the following installed on your system:
    yarn install
    ```
 
-### Configuration
+---
 
-1. Create an `.env.local` file in the root directory to store your environment variables. For example:
+## Configuration
+
+1. Create an `.env.local` file in the root directory to store your environment variables. Example configuration:
 
    ```env
-   NEXT_PUBLIC_API_URL=<your_api_endpoint>
-   NEXTAUTH_SECRET=<your_secret_key>
-   STRIPE_API_KEY=<your_stripe_api_key>
+   AUTH_SECRET=your_auth_secret
+   NEXTAUTH_URL=http://localhost:3000
+
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+   GEMINI_API_KEY=your_gemini_api_key
+
+   SMTP_HOST=smtp.example.com
+   SMTP_PORT=587
+   SMTP_USER=example@example.com
+   SMTP_PASS=your_smtp_password
+
+   REDIS_URL=redis://localhost:6379
    ```
 
-2. Configure your database (if applicable) by setting the necessary database connection strings in the `.env.local` file.
+2. Verify that Redis is running on your system:
+
+   - Start Redis:
+     ```bash
+     redis-server
+     ```
+   - Test the connection:
+     ```bash
+     redis-cli ping
+     ```
 
 ---
 
 ## Run the Project
 
-Start the development server:
+### Development
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+1. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-The website will be accessible at `http://localhost:3000`.
+2. Open the application in your browser at `http://localhost:3000`.
 
-To build the project for production:
+### Production
 
-```bash
-npm run build
-# or
-yarn build
-```
+1. Build the project:
+   ```bash
+   npm run build
+   # or
+   yarn build
+   ```
+
+2. Start the production server:
+   ```bash
+   npm run start
+   # or
+   yarn start
+   ```
 
 ---
 
@@ -97,11 +156,11 @@ yarn build
 
 Once the project is running, users can:
 
-1. Browse the catalog of bottled water products.
-2. View product details, including images, descriptions, and pricing.
-3. Add items to their shopping cart.
-4. Register or log in to manage their orders and account.
-5. Proceed to checkout to complete orders with secure payment processing.
+- Browse the catalog of bottled water products.
+- View product details, including images, descriptions, and pricing.
+- Add items to their shopping cart.
+- Register or log in to manage their orders and account.
+- Proceed to checkout to complete orders with secure payment processing.
 
 ---
 
@@ -109,60 +168,12 @@ Once the project is running, users can:
 
 The project uses the following technologies:
 
-- **Next.js**: React framework for building performant web applications.
-- **React**: Frontend JavaScript library for building user interfaces.
-- **Tailwind CSS**: Utility-first CSS framework for responsive design.
-- **Prisma** (optional): For database management and ORM.
-- **Stripe API**: Payment gateway integration.
-- **NextAuth.js**: Authentication and session management.
-
----
-
-## Folder Structure
-
-Here's an overview of the main folders in the project:
-
-```plaintext
-.
-├── components/          # Reusable UI components
-├── pages/               # Next.js routing and page components
-├── styles/              # Global and module-specific styles
-├── utils/               # Helper functions and utilities
-├── public/              # Static assets such as images and icons
-├── prisma/              # Prisma schema (if using a database)
-└── api/                 # Backend API routes
-```
-
----
-
-## Deployment
-
-To deploy this project, follow these steps:
-
-1. **Build the project:**
-
-   ```bash
-   npm run build
-   ```
-
-2. **Run in production mode:**
-
-   ```bash
-   npm run start
-   ```
-
-3. Deploy the project to a platform like **Vercel**, **Netlify**, or **AWS**.
-
----
-
-## Contributing
-
-We welcome contributions! To contribute:
-
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature-branch-name`).
-3. Commit your changes and push the branch.
-4. Open a pull request for review.
+- **Next.js:** React framework for building performant web applications.
+- **React:** Frontend JavaScript library for building user interfaces.
+- **Tailwind CSS:** Utility-first CSS framework for responsive design.
+- **Redis:** Session management and caching.
+- **Stripe API:** Payment gateway integration.
+- **NextAuth.js:** Authentication and session management.
 
 ---
 
