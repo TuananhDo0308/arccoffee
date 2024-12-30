@@ -44,6 +44,7 @@ This is an eCommerce website built with **Next.js**, providing a seamless and re
 - [Run the Project](#run-the-project)
 - [Usage](#usage)
 - [Tech Stack](#tech-stack)
+- [Folder Structure](#folder-structure)
 - [License](#license)
 
 ---
@@ -119,6 +120,20 @@ Ensure you have the following installed on your system:
      redis-cli ping
      ```
 
+3. API Endpoints:
+
+   Ensure that all API endpoints are correctly defined in `src/utils/api-links.ts`. For example:
+
+   ```typescript
+   const authUrl = <your backend api>;
+   ```
+   Ensure that all API endpoints are correctly defined in `src/utils/client-api.ts`. For example:
+
+   ```typescript
+   const authUrl = <your backend api>;
+   ```
+
+   
 ---
 
 ## Run the Project
@@ -177,6 +192,28 @@ The project uses the following technologies:
 - **Tailwind CSS:** Utility-first CSS framework for responsive design.
 - **Redis:** Session management and caching.
 - **Axios:** For making HTTP requests.
+
+---
+
+## Folder Structure
+
+```plaintext
+src/
+├── app/                # Routing and application logic
+├── assets/             # Static assets like images, fonts
+├── components/         # Reusable React components
+├── hooks/              # Custom React hooks
+├── lib/                # Libraries and utilities
+├── slices/             # Redux slices for state management
+├── store/              # Redux store configuration
+├── utils/              # Helper functions and configurations
+│   ├── api-links.ts     # Define API endpoints here
+│   └──  client-api.ts  # Axios instance configuration
+├── public/             # Public assets (e.g., images)
+└── styles/             # Tailwind and global CSS styles
+```
+
+**Note:** Ensure that all API endpoints are correctly defined in `src/utils/apiLinks.ts`.
 
 
 ---
