@@ -6,6 +6,16 @@ This is an eCommerce website built with **Next.js**, providing a seamless and re
 
 ---
 
+## Related Repositories
+
+This project is part of a larger ecosystem. Here are the related repositories:
+
+- **Frontend (User Website):** [eCommerce Website - User Interface](https://github.com/TuananhDo0308/arccoffee.git)
+- **Admin Dashboard:** [Admin Dashboard](https://github.com/TuananhDo0308/arccoffee-admin.git)
+- **Backend (API Server):** [API Server](https://github.com/tquocan04/Online_Shopping.git)
+
+---
+
 ## Preview
 
 ### 1. Website UI
@@ -44,7 +54,6 @@ This is an eCommerce website built with **Next.js**, providing a seamless and re
 - [Run the Project](#run-the-project)
 - [Usage](#usage)
 - [Tech Stack](#tech-stack)
-- [Folder Structure](#folder-structure)
 - [License](#license)
 
 ---
@@ -192,29 +201,6 @@ The project uses the following technologies:
 - **Tailwind CSS:** Utility-first CSS framework for responsive design.
 - **Redis:** Session management and caching.
 - **Axios:** For making HTTP requests.
-
----
-
-## Folder Structure
-
-```plaintext
-src/
-├── app/                # Routing and application logic
-├── assets/             # Static assets like images, fonts
-├── components/         # Reusable React components
-├── hooks/              # Custom React hooks
-├── lib/                # Libraries and utilities
-├── slices/             # Redux slices for state management
-├── store/              # Redux store configuration
-├── utils/              # Helper functions and configurations
-│   ├── api-links.ts     # Define API endpoints here
-│   └──  client-api.ts  # Axios instance configuration
-├── public/             # Public assets (e.g., images)
-└── styles/             # Tailwind and global CSS styles
-```
-
-**Note:** Ensure that all API endpoints are correctly defined in `src/utils/apiLinks.ts`.
-
 
 ---
 

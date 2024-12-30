@@ -5,7 +5,7 @@ import {
   setSelectedCategory,
   setLoading,
 } from "@/src/slices/tabFilterSlice";
-import { setFilteredProducts } from "@/src/slices/filteredProductsSlice";
+import { setFilteredProducts, setMessage } from "@/src/slices/filteredProductsSlice";
 
 export const SlideTabs = () => {
   const dispatch = useAppDispatch();
@@ -24,6 +24,7 @@ export const SlideTabs = () => {
       );
       dispatch(setFilteredProducts(filtered)); // Lọc sản phẩm theo danh mục
     }
+    dispatch(setMessage("")); // Xóa thông báo
     dispatch(setSelectedCategory(categoryName)); // Cập nhật danh mục được chọn
   };
 

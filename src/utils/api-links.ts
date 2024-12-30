@@ -1,4 +1,4 @@
-const authUrl = 'http://localhost:5000';
+const authUrl = 'https://9c90-113-161-72-138.ngrok-free.app';
 
 const apiLinks = {
   user: {
