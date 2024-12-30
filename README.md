@@ -125,12 +125,12 @@ Ensure you have the following installed on your system:
    Ensure that all API endpoints are correctly defined in `src/utils/api-links.ts`. For example:
 
    ```typescript
-   const authUrl = <your backend api>;
+   const authUrl = <your backend api url>;
    ```
    Ensure that all API endpoints are correctly defined in `src/utils/client-api.ts`. For example:
 
    ```typescript
-   const authUrl = <your backend api>;
+   const clientUrl = <your frontend url>;
    ```
 
    
