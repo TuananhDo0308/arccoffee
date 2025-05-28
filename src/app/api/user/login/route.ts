@@ -16,10 +16,10 @@ export const POST = async (request: NextRequest) => {
     });
 
     // Extract the access token from the external service's response
-    const accessToken = response.data;
+    const token = response.data;
 
     // Return the access token to the client
-    return NextResponse.json({ accessToken }, { status: 200 });
+    return NextResponse.json({ token }, { status: 200 });
 
   } catch (error) {
     console.error('Error during authentication:', error);

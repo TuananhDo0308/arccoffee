@@ -10,7 +10,7 @@ export const DELETE = async (req: NextRequest) => {
     
     try {
         const session = await auth();
-        const token = session?.user?.accessToken;        
+        const token = session?.user?.token;        
         const response = await httpClient.delete({
             url: `${apiLinks.cart.deleteItem}`,
             params: {prodId: id},

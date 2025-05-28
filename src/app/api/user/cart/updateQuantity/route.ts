@@ -5,7 +5,7 @@ import { auth } from '@/auth';
 
 export const PUT = async (req: NextRequest) => {
     const session=await auth()
-    const token =session?.user?.accessToken
+    const token =session?.user?.token
 
     try {        
         const { searchParams } = new URL(req.url);

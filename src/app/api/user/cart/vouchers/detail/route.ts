@@ -8,7 +8,7 @@ export const POST = async  (req: NextRequest) => {
 
     try {
         const session=await auth()
-        const token =session?.user?.accessToken        
+        const token =session?.user?.token        
         const response = await httpClient.get({
             url: apiLinks.voucher.getDetailVoucher, 
             params:{"code":code},

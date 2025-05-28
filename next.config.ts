@@ -4,9 +4,8 @@ const nextConfig = {
     domains: ['lh3.googleusercontent.com'], // Thêm domain này
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        pathname: '/**', // Allows all paths under res.cloudinary.com
+        protocol: "https",
+        hostname: "**", // vẫn giữ nếu bạn muốn tất cả (không khuyến khích khi production)
       },
     ],
   },

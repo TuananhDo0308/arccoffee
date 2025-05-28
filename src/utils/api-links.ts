@@ -1,4 +1,4 @@
-const authUrl = 'https://9c90-113-161-72-138.ngrok-free.app';
+const authUrl = 'http://dotnet.aaateammm.online';
 
 const apiLinks = {
   user: {
@@ -49,7 +49,7 @@ const apiLinks = {
   authen:{
     updatePassword: `${authUrl}/api/authentication/new-password`,
     googlesignin: `${authUrl}/api/authentication/login-google`,
-    registerGoogle:`${authUrl}/api/authentication/signup-google`,
+    registerGoogle:`${authUrl}/api/authentication/google`,
   }
 };
 

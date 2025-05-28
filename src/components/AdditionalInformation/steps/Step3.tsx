@@ -38,7 +38,8 @@ export default function Step3x({ formData, updateFormData, onPrev, onSubmit, loa
   useEffect(() => {
     const fetchData = async () => {
       const res = await httpClient.get({ url: clientLinks.user.region });
-      setRegions(res.data.data);
+      setRegions(res.data.data.data);
+      console.log("Regions fetched:", res.data.data);
     };
     fetchData();
   }, []);

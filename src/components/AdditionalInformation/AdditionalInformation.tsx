@@ -5,7 +5,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { Progress, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
 import { showPopup } from '@/src/slices/message';
 import { useAppDispatch } from '@/src/hooks/hook';
-import { httpClient, clientLinks } from '@/src/utils';
+import { httpClient, clientLinks, apiLinks } from '@/src/utils';
 import Step1x from './steps/Step1';
 import Step2x from './steps/Step2';
 import Step3x from './steps/Step3';
@@ -22,7 +22,7 @@ export default function AdditionalInformation({ isOpen, onClose }: AdditionalInf
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
+    password: '1',
     phoneNumber: '',
     gender: '',
     year: 0,
@@ -60,7 +60,7 @@ export default function AdditionalInformation({ isOpen, onClose }: AdditionalInf
       const requestBody = {
         name: session?.tempname || '',
         email: session?.tempemail || '',
-        password: null,
+        password: "3hkjl12bhejkldwhqbjklbcXHJKLDASbjklfhneqwjklHRJKQhk",
         phoneNumber: formData.phoneNumber,
         gender: formData.gender,
         year: parseInt(formData.year as any) || 0,
@@ -78,7 +78,7 @@ export default function AdditionalInformation({ isOpen, onClose }: AdditionalInf
   
       // Gửi request với JSON
       const res = await httpClient.post({
-        url: clientLinks.email.registerGoogle,
+        url: apiLinks.authen.registerGoogle,
         data: requestBody,
         contentType: 'application/json' // Đặt Content-Type là JSON
       });

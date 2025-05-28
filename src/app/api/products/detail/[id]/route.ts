@@ -2,32 +2,35 @@ import { NextResponse, NextRequest } from 'next/server';
 import axios from 'axios';
 import { httpClient, apiLinks } from '@/src/utils';
 
-export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
-    const { id } = params; // Lấy id từ URL
+// Chỉ nhận req, không cần params
+export async function GET(req: NextRequest) {
+  // Lấy id từ URL bằng req.nextUrl.pathname
+  const id = req.nextUrl.pathname.split('/').pop(); // Lấy phần cuối của URL (id)
 
-    try {
-        // Gọi API và truyền id vào URL động
-        const response = await httpClient.get({
-            url: `${apiLinks.homepage.getDetailProduct}/${id}`, // Đường dẫn động
-        });
+  if (!id) {
+    return NextResponse.json({ message: 'ID is required' }, { status: 400 });
+  }
 
-        const data = response.data;
+  try {
+    // Gọi API và truyền id vào URL động
+    const response = await httpClient.get({
+      url: `${apiLinks.homepage.getDetailProduct}/${id}`,
+    });
 
-        return NextResponse.json({ data }, { status: 200 });
-    } catch (error) {
-        console.error('Error during get api:', error);
+    const data = response.data;
 
-        if (axios.isAxiosError(error) && error.response) {
-            const errorMessage = error.response.data?.message || 'Failed to fetch bill details';
-            return NextResponse.json(
-                { message: errorMessage },
-                { status: error.response.status }
-            );
-        }
+    return NextResponse.json({ data }, { status: 200 });
+  } catch (error) {
+    console.error('Error during get api:', error);
 
-        return NextResponse.json(
-            { message: 'Internal Server Error' },
-            { status: 500 }
-        );
+    if (axios.isAxiosError(error) && error.response) {
+      const errorMessage = error.response.data?.message || 'Failed to fetch bill details';
+      return NextResponse.json(
+        { message: errorMessage },
+        { status: error.response.status }
+      );
     }
-};
+
+    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+  }
+}

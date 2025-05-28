@@ -7,7 +7,7 @@ import { auth } from '@/auth'; // Đường dẫn tới cấu hình NextAuth
 export const GET = async () => {
     try {
         const session = await auth();
-        const token = session?.user?.accessToken;
+        const token = session?.user?.token;
         const response = await httpClient.get({
             url: apiLinks.user.getProfile,
             token:token

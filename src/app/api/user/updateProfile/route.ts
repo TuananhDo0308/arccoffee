@@ -6,7 +6,7 @@ import { auth } from '@/auth';
 export const PUT = async (request: NextRequest) => {
     const formData = await request.formData();
     const session = await auth();
-    const token = session?.user?.accessToken;
+    const token = session?.user?.token;
     try {        
         const response = await httpClient.put({
             url: apiLinks.user.updateProfile,

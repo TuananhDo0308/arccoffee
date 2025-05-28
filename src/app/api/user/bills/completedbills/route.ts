@@ -6,7 +6,7 @@ import { auth } from '@/auth';
 export const GET = async () => {
     try {
         const session = await auth();
-        const token = session?.user?.accessToken;
+        const token = session?.user?.token;
         const response = await httpClient.get({
             url: apiLinks.bill.getCompletedBills,
             token: token

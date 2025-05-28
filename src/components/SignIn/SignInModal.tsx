@@ -47,7 +47,7 @@ export default function SignIn() {
 
         console.log("Session after login:", session);
 
-        if (session?.user?.accessToken) {
+        if (session?.user?.token) {
           // Fetch the cart and show success message
           dispatch(
             showPopup({

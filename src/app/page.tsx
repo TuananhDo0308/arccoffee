@@ -85,8 +85,8 @@ export default function Home() {
           httpClient.get({ url: clientLinks.homepage.category }),
         ]);
 
-        dispatch(setProducts(productsResponse.data.data));
-        dispatch(setCategories(categoriesResponse.data.data));
+        dispatch(setProducts(productsResponse.data.data.data));
+        dispatch(setCategories(categoriesResponse.data.data.data));
       } catch (err) {
         console.error("Error fetching data:", err);
       } finally {
@@ -102,7 +102,7 @@ export default function Home() {
     console.log("Session:", session);
     if (session?.needsAdditionalInfo) {
       setShowAdditionalInfoPopup(true);
-    } else if (session?.user?.accessToken && !hasFetchedCart) {
+    } else if (session?.user?.token && !hasFetchedCart) {
       fetchCart();
     }
   }, [session, hasFetchedCart]);

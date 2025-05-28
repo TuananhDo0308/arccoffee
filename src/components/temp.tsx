@@ -77,12 +77,12 @@ export const AdditionalInformation: React.FC<AdditionalInformationProps> = ({ is
     //     },
     //   });
 
-    //   if (response.data.accessToken) {
+    //   if (response.data.token) {
     //     await update({
     //       ...session,
     //       user: {
     //         ...session?.user,
-    //         accessToken: response.data.accessToken,
+    //         token: response.data.token,
     //         id: response.data.id,
     //         emailVerified: response.data.emailVerified,
     //         needsAdditionalInfo: false,

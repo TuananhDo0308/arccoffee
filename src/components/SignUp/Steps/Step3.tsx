@@ -40,7 +40,7 @@ const Step3 = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await httpClient.get({ url: clientLinks.user.region });
-      setRegions(res.data.data);
+      setRegions(res.data.data.data);
     };
     fetchData();
   }, []);
