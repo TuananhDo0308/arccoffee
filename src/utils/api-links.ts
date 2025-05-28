@@ -48,7 +48,7 @@ const apiLinks = {
 
   authen:{
     updatePassword: `${authUrl}/api/authentication/new-password`,
-    googlesignin: `${authUrl}/api/authentication/login-google`,
+    googlesignin: `${authUrl}/api/authentication/login/google`,
     registerGoogle:`${authUrl}/api/authentication/google`,
   }
 };
