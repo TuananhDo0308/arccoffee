@@ -21,10 +21,10 @@ export const POST = async (request: NextRequest) => {
 
     const response = await httpClient.post({
       url: apiLinks.authen.googlesignin,
-      params: { idGG: googleID }, // Kiểm tra nếu backend yêu cầu params
+      params: { googleId: googleID }, // Kiểm tra nếu backend yêu cầu params
     });
 
-    console.log("Response from backend:", response.data);
+    console.log("Response from backend:", response.data.data);
 
     if (response.status === 200) {
       return NextResponse.json(

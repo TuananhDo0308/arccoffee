@@ -86,7 +86,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             });
 
             const userData = response.data;
-
+            console.log("Google sign-in response:", userData);
             if (response.status === 200 && userData?.ok === true) {
               token.accessToken = userData.data.accessToken;
               token.id = userData.data.id;
