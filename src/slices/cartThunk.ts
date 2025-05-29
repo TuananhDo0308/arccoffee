@@ -8,14 +8,12 @@ export const addToCartThunk = createAsyncThunk(
   'cart/addToCartThunk',
   async (newItem:any, { getState, rejectWithValue }) => {
     const state = getState() as RootState;
-    const productInStore = state.filteredProducts.products.find(
-      (product) => product.productId === newItem.productId
-    );
+
     const isLoggedIn = state?.auth.isLogin;
     const item =normalizeCartItem(newItem)
     if (isLoggedIn) {
       try {
-        const response = await httpClient.post({ 
+        await httpClient.post({ 
           url: clientLinks.cart.addToCart,
           params:{"prodId":item.productId} 
         });

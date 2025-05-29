@@ -41,8 +41,9 @@ export const ProductCard = ({ product }: any) => {
     }
   }, [product.id]);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (product:any) => {
     const id = Date.now();
+    console.log("Adding product to cart:", product);
     dispatch(addToCartThunk(product))
     .unwrap()
     .then(() => {
@@ -157,7 +158,7 @@ export const ProductCard = ({ product }: any) => {
               }}
               onClick={(e) => {
                 e.stopPropagation();
-                handleAddToCart();
+                handleAddToCart(product);
               }}
             >
               Add +

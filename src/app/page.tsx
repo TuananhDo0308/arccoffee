@@ -55,7 +55,7 @@ export default function Home() {
           url: clientLinks.cart.addListCart,
           data: { items },
         });
-        result = response.data?.data.data;
+        result = response.data?.data.data.data;
       }
 
       console.log("Fetched Cart:", result);
@@ -102,7 +102,7 @@ export default function Home() {
     console.log("Session:", session);
     if (session?.needsAdditionalInfo) {
       setShowAdditionalInfoPopup(true);
-    } else if (session?.user?.token && !hasFetchedCart) {
+    } else if (session?.user?.accessToken && !hasFetchedCart) {
       fetchCart();
     }
   }, [session, hasFetchedCart]);

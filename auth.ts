@@ -148,20 +148,17 @@ async session({ session, token }) {
       image: token.picture as string,
       emailVerified: token.emailVerified as boolean,
     };
-
     try {
       // Fetch the cart data after the session is created
       if (token.accessToken) {
         console.log(token.accessToken)
         const cartResponse = await httpClient.get({
-          url: clientLinks.cart.cart, // Replace with your cart API endpoint
-          headers: {
-            Authorization: `${token.accessToken}`,
-          },
+          url: apiLinks.cart.getCart, 
+         token:token.accessToken
         });
 
-        const cartData = cartResponse.data;
-
+        const cartData = cartResponse.data.data.data;
+        console.log("Cart data fetched:", cartData);
         // Dispatch custom event to update Redux store
         if (typeof window !== "undefined") {
           window.dispatchEvent(
