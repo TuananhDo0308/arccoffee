@@ -294,10 +294,10 @@ export default function CheckoutPage() {
         return;
       }
   
-      const { percentage, maxDiscount } = data.data;
-  
+      const { percentage, maxDiscount } = data.data.data;
+
       const discountValue = Math.min((subtotal * percentage) / 100, maxDiscount);
-  
+      
       setDiscount(discountValue);
       dispatch(
         showPopup({
