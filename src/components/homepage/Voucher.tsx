@@ -16,7 +16,7 @@ const VerticalAccordion = () => {
         setLoading(true);
         const response = await httpClient.get({
           url: clientLinks.voucher.voucher,
-        }); // Thay bằng URL API của bạn
+        });
         const data =  response.data.data.data;
         setVouchers(data); // Lưu dữ liệu voucher vào state
       } catch (error) {

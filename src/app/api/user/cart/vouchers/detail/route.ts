@@ -31,7 +31,7 @@ export const POST = async  (req: NextRequest) => {
         console.error('Error during get api:', error);
 
         if (axios.isAxiosError(error) && error.response) {
-            const errorMessage = error.response.data?.message || 'Failed to fetch bill details';
+            const errorMessage = error.response.data?.message || 'Failed to fetch vouchers';
             return NextResponse.json(
                 { message: errorMessage },
                 { status: error.response.status }
