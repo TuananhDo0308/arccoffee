@@ -233,7 +233,7 @@ export default function CheckoutPage() {
     if (validateForm()) {
       const data = {
         paymentId: paymentMethod,
-        shippingMethodId: shippingMethod,
+        shippingId: shippingMethod,
         phoneNumber: phoneNumber,
         regionId: region,
         cityId: city,
@@ -244,7 +244,7 @@ export default function CheckoutPage() {
       };
 
       try {
-        const response = await httpClient.put({
+        const response = await httpClient.post({
           url: clientLinks.bill.placeOrder,
           data: data,
         });
