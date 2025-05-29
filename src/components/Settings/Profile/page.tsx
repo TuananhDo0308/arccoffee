@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { useSession } from 'next-auth/react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { clientLinks, httpClient } from "@/src/utils"
 import { CalendarDate } from "@internationalized/date"
 import Image from "next/image"
-import { Calendar } from '@nextui-org/react'
 import { Camera } from 'lucide-react'
 import { ProfileTabSkeleton } from '../ProfileSkeleton'
 
@@ -56,7 +54,6 @@ export function ProfileTab() {
 
   const fetchUserData = async () => {
     try {
-      console.log('faetch user data: ')
       setIsLoading(true)
       const [regionsResponse, userResponse] = await Promise.all([
         httpClient.get({ url: clientLinks.user.region }),
@@ -64,17 +61,16 @@ export function ProfileTab() {
       ])
 
       const userData = userResponse.data.data
-      console.log('user data: ', {userData})
       setUser({
         ...userData,
         birthDate: userData.birthDate ? new CalendarDate(userData.birthDate.year, userData.birthDate.month, userData.birthDate.day) : null,
       })
+
       const regiondata = regionsResponse.data.data
-      console.log('region response data: ', {regiondata})
 
-      setRegions(regionsResponse.data.data)
+      setRegions(regiondata)
 
-      const userRegion = regionsResponse.data.data.find(
+      const userRegion = regiondata.find(
         (region: Region) => region.id === userData.regionId
       )
 

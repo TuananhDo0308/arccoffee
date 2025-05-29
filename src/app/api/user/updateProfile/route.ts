@@ -6,7 +6,7 @@ import { auth } from '@/auth';
 export const PUT = async (request: NextRequest) => {
     const formData = await request.formData();
     const session = await auth();
-    const token = session?.user?.token;
+    const token = session?.user?.accessToken;
     try {        
         const response = await httpClient.put({
             url: apiLinks.user.updateProfile,
@@ -22,7 +22,7 @@ export const PUT = async (request: NextRequest) => {
         console.error('Error during get api:', error);
 
         if (axios.isAxiosError(error) && error.response) {
-            const errorMessage = error.response.data?.message || 'Failed to fetch bill details';
+            const errorMessage = error.response.data?.message || 'Failed to update profile';
             return NextResponse.json(
                 { message: errorMessage },
                 { status: error.response.status }
