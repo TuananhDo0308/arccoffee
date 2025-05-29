@@ -8,7 +8,7 @@ export const GET = async () => {
             url: apiLinks.user.region,
         })
 
-        const data = response.data;
+        const data = response.data.data;
 
         return NextResponse.json({ data }, { status: 200 });
     } catch (error) {

@@ -35,17 +35,21 @@ interface SelectOption {
   name: string;
 }
 
+interface District {
+  id: string
+  name: string
+}
 
 interface City {
-  id: string;
-  name: string;
-  districts: { id: string; name: string }[];
+  id: string
+  name: string
+  districts: District[]
 }
 
 interface Region {
-  id: string;
-  name: string;
-  cities: City[];
+  id: string
+  name: string
+  cities: City[]
 }
 
 export default function CheckoutPage() {
@@ -97,24 +101,24 @@ export default function CheckoutPage() {
         const response = await httpClient.get({
           url: clientLinks.user.getProfile,
         });
-        if (response.data && response.data.data.data) {
-          setCity(response.data.data.data.cityId);
-          setDistrict(response.data.data.data.districtId);
-          setRegion(response.data.data.data.regionId);
-          setAddress(response.data.data.data.street);
-          setPhoneNumber(response.data.data.data.phoneNumber);
+        if (response.data && response.data.data) {
+          setCity(response.data.data.cityId);
+          setDistrict(response.data.data.districtId);
+          setRegion(response.data.data.regionId);
+          setAddress(response.data.data.street);
+          setPhoneNumber(response.data.data.phoneNumber);
         }
   
         if (res.data && res.data.data) {
           setRegions(res.data.data);
           const userRegion = res.data.data.find(
-            (region: any) => region.id === response.data.data.data.regionId
+            (region: any) => region.id === response.data.data.regionId
           );
   
           setCities(userRegion?.cities || []);
   
           const userCity = userRegion?.cities?.find(
-            (city: any) => city.id === response.data.data.data.cityId
+            (city: any) => city.id === response.data.data.cityId
           );
   
           setDistricts(userCity?.districts || []);
@@ -378,3 +382,217 @@ export default function CheckoutPage() {
   );
 }
 
+// "use client"
+
+// import type React from "react"
+// import { useState, useEffect } from "react"
+// import { CustomerInformation } from "@/src/components/Checkout/CustomerInformation"
+
+// interface SelectOption {
+//   id: string
+//   name: string
+// }
+
+// interface District {
+//   id: string
+//   name: string
+// }
+
+// interface City {
+//   id: string
+//   name: string
+//   districts: District[]
+// }
+
+// interface Region {
+//   id: string
+//   name: string
+//   cities: City[]
+// }
+
+// interface LocationData {
+//   message: string
+//   data: Region[]
+// }
+
+// export default function CustomerInfoPage() {
+//   // Form state
+//   const [customerNote, setCustomerNote] = useState("")
+//   const [address, setAddress] = useState("")
+//   const [phoneNumber, setPhoneNumber] = useState("")
+
+//   // Location state
+//   const [region, setRegion] = useState("")
+//   const [city, setCity] = useState("")
+//   const [district, setDistrict] = useState("")
+
+//   // Options for dropdowns
+//   const [regionOptions, setRegionOptions] = useState<Region[]>([])
+//   const [cityOptions, setCityOptions] = useState<City[]>([])
+//   const [districtOptions, setDistrictOptions] = useState<SelectOption[]>([])
+
+//   // Loading and error states
+//   const [isLoading, setIsLoading] = useState(true)
+//   const [error, setError] = useState<string | null>(null)
+
+//   // Fetch location data from API on component mount
+//   useEffect(() => {
+//     const fetchLocationData = async () => {
+//       try {
+//         setIsLoading(true)
+//         setError(null)
+
+//         const response = await fetch("http://dotnet.aaateammm.online/api/regions")
+
+//         if (!response.ok) {
+//           throw new Error(`HTTP error! status: ${response.status}`)
+//         }
+
+//         const data: LocationData = await response.json()
+
+//         if (data.data && Array.isArray(data.data)) {
+//           setRegionOptions(data.data)
+//         } else {
+//           throw new Error("Invalid data format received from API")
+//         }
+//       } catch (err) {
+//         console.error("Error fetching location data:", err)
+//         setError(err instanceof Error ? err.message : "Failed to fetch location data")
+//       } finally {
+//         setIsLoading(false)
+//       }
+//     }
+
+//     fetchLocationData()
+//   }, [])
+
+//   // Handle region change - update cities and reset city/district
+//   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+//     const selectedRegionId = e.target.value
+//     setRegion(selectedRegionId)
+//     setCity("") // Reset city
+//     setDistrict("") // Reset district
+
+//     if (selectedRegionId) {
+//       const selectedRegion = regionOptions.find((r) => r.id === selectedRegionId)
+//       setCityOptions(selectedRegion?.cities || [])
+//     } else {
+//       setCityOptions([])
+//     }
+//     setDistrictOptions([]) // Clear districts
+//   }
+
+//   // Handle city change - update districts and reset district
+//   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+//     const selectedCityId = e.target.value
+//     setCity(selectedCityId)
+//     setDistrict("") // Reset district
+
+//     if (selectedCityId) {
+//       const selectedRegion = regionOptions.find((r) => r.id === region)
+//       const selectedCity = selectedRegion?.cities.find((c) => c.id === selectedCityId)
+//       const districts = selectedCity?.districts.map((d) => ({ id: d.id, name: d.name })) || []
+//       setDistrictOptions(districts)
+//     } else {
+//       setDistrictOptions([])
+//     }
+//   }
+
+//   // Handle district change
+//   const handleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+//     setDistrict(e.target.value)
+//   }
+
+//   const handleSubmit = () => {
+//     const formData = {
+//       customerNote,
+//       address,
+//       phoneNumber,
+//       region,
+//       city,
+//       district,
+//     }
+//     console.log("Form Data:", formData)
+
+//     // Get readable names for selected locations
+//     const selectedRegion = regionOptions.find((r) => r.id === region)
+//     const selectedCity = cityOptions.find((c) => c.id === city)
+//     const selectedDistrict = districtOptions.find((d) => d.id === district)
+
+//     console.log("Selected Locations:", {
+//       region: selectedRegion?.name,
+//       city: selectedCity?.name,
+//       district: selectedDistrict?.name,
+//     })
+//   }
+
+//   return (
+//     <div className="min-h-screen bg-zinc-950 p-8">
+//       <div className="max-w-2xl mx-auto space-y-6">
+//         <h1 className="text-3xl font-bold text-white mb-8">Customer Information Form</h1>
+
+//         {/* Loading State */}
+//         {isLoading && (
+//           <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 text-center">
+//             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-4"></div>
+//             <p className="text-white">Đang tải dữ liệu địa chỉ...</p>
+//           </div>
+//         )}
+
+//         {/* Error State */}
+//         {error && (
+//           <div className="bg-red-900 border border-red-700 rounded-lg p-4">
+//             <p className="text-red-200 font-medium">Lỗi tải dữ liệu:</p>
+//             <p className="text-red-300 text-sm mt-1">{error}</p>
+//             <button
+//               onClick={() => window.location.reload()}
+//               className="mt-3 bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded text-sm transition-colors"
+//             >
+//               Thử lại
+//             </button>
+//           </div>
+//         )}
+
+//         {/* Form - only show when not loading and no error */}
+//         {!isLoading && !error && (
+//           <>
+//             <CustomerInformation
+//               customerNote={customerNote}
+//               setCustomerNote={setCustomerNote}
+//               address={address}
+//               setAddress={setAddress}
+//               district={district}
+//               setDistrict={handleDistrictChange}
+//               city={city}
+//               setCity={handleCityChange}
+//               phoneNumber={phoneNumber}
+//               setPhoneNumber={setPhoneNumber}
+//               cityOptions={cityOptions}
+//               districtOptions={districtOptions}
+//               region={region}
+//               setRegion={handleRegionChange}
+//               regionOptions={regionOptions}
+//             />
+
+//             <button
+//               onClick={handleSubmit}
+//               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors"
+//             >
+//               Submit Form
+//             </button>
+
+//             {/* Debug info */}
+//             <div className="bg-zinc-800 p-4 rounded-lg">
+//               <h3 className="text-white font-medium mb-2">Current Selection:</h3>
+//               <div className="text-zinc-300 text-sm space-y-1">
+//                 <p>Region: {regionOptions.find((r) => r.id === region)?.name || "None"}</p>
+//                 <p>City: {cityOptions.find((c) => c.id === city)?.name || "None"}</p>
+//                 <p>District: {districtOptions.find((d) => d.id === district)?.name || "None"}</p>
+//               </div>
+//             </div>
+//           </>
+//         )}
+//       </div>
+//     </div>
+//   )
+// }

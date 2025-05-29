@@ -40,6 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           });
 
           const user = response.data;
+          console.log('auth.ts - user:', {user})
 
           if (!user || !user.accessToken) {
             throw new Error("Invalid credentials or missing access token.");
@@ -151,10 +152,11 @@ async session({ session, token }) {
     try {
       // Fetch the cart data after the session is created
       if (token.accessToken) {
+        console.log(token.accessToken)
         const cartResponse = await httpClient.get({
-          url: clientLinks.cart.getCart, // Replace with your cart API endpoint
+          url: clientLinks.cart.cart, // Replace with your cart API endpoint
           headers: {
-            Authorization: `Bearer ${token.accessToken}`,
+            Authorization: `${token.accessToken}`,
           },
         });
 

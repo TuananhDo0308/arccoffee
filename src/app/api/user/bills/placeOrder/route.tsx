@@ -5,14 +5,14 @@ import { auth } from '@/auth';
 
 export const PUT = async (req: NextRequest) => {
     const session=await auth()
-    const token =session?.user?.token
+    const token =session?.user?.accessToken
 
     try {        
         const body = await req.json();
         const data = body;  
         console.log("data:",data)
    
-        const response = await httpClient.put({
+        const response = await httpClient.post({
             url: apiLinks.bill.placeOrder,
             token: token,
             data:data

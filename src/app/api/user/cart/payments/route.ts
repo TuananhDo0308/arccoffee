@@ -6,13 +6,13 @@ import { auth } from '@/auth';
 export const GET = async (request: NextRequest) => {
     try {
     const session=await auth()
-    const token =session?.user?.token
+    const token =session?.user?.accessToken
         const response = await httpClient.get({
             url: apiLinks.payment.getPayments,
             token: token
         })
 
-        const data = response.data;
+        const data = response.data.data;
 
         return NextResponse.json({ data }, { status: 200 });
     } catch (error) {

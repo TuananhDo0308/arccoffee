@@ -56,17 +56,21 @@ export function ProfileTab() {
 
   const fetchUserData = async () => {
     try {
+      console.log('faetch user data: ')
       setIsLoading(true)
       const [regionsResponse, userResponse] = await Promise.all([
         httpClient.get({ url: clientLinks.user.region }),
         httpClient.get({ url: clientLinks.user.getProfile }),
       ])
 
-      const userData = userResponse.data.data.data
+      const userData = userResponse.data.data
+      console.log('user data: ', {userData})
       setUser({
         ...userData,
         birthDate: userData.birthDate ? new CalendarDate(userData.birthDate.year, userData.birthDate.month, userData.birthDate.day) : null,
       })
+      const regiondata = regionsResponse.data.data
+      console.log('region response data: ', {regiondata})
 
       setRegions(regionsResponse.data.data)
 

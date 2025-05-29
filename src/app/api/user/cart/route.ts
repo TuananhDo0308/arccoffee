@@ -6,7 +6,9 @@ import { auth } from '@/auth';
 export const GET = async () => {
     try {
         const session = await auth();
-        const token = session?.user?.token;
+        const token = session?.user?.accessToken;
+
+        console.log('token: ', {token})
         const response = await httpClient.get({
             url: apiLinks.cart.getCart,
             token: token
