@@ -30,6 +30,8 @@ const apiLinks = {
     getBills: `${authUrl}/api/bills`,
     getDetailBills: `${authUrl}/api/bills`,
     checkout: `${authUrl}/api/bills`,
+    getPendingBills: `${authUrl}/api/bills?status=Pending`,
+    getCompletedBills: `${authUrl}/api/bills?status=Completed`,
   },
   payment: {
     getPayments: `${authUrl}/api/payments`,
