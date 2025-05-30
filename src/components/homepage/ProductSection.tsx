@@ -27,7 +27,7 @@ export default function ProductSection() {
 
               <div className="flex gap-3 w-full sm:w-auto">
                 <SearchBox />
-                <DottedButton onClick={() => setIsSearchOpen(true)} />
+                {/* <DottedButton onClick={() => setIsSearchOpen(true)} /> */}
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-const authUrl = 'http://dotnet.aaateammm.online';
+const authUrl = 'http://localhost:8888'; // Replace with your actual base URL
 
 const apiLinks = {
   user: {
